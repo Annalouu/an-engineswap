@@ -8,7 +8,6 @@ Config.custom_engine = {
 	[`r34sound`] = {
 		custom = true,
 		turboinstall = true,
-		handlingName = 'r34sound',
 		label = 'RB26DE Twin Turbo',
 		soundname = 'r34sound',
 	},
@@ -16,31 +15,27 @@ Config.custom_engine = {
 	[`aq2jzgterace`] = {
 		custom = true,
 		turboinstall = true,
-		handlingName = 'aq2jzgterace',
 		label = 'Supra 2JZ GTE Twin Turbo',
 		soundname = 'aq2jzgterace',
 	},
 
-	[`rx713b`] = {
+	[`rotary7`] = {
 		custom = true,
 		turboinstall = true,
-		handlingName = 'rx713b',
 		label = 'RX7 13B-REW twin-rotor Twin Turbo',
 		soundname = 'rotary7',
 	},
 
 	[`fordvoodoo`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'fordvoodoo',   
+	turboinstall = true,
 	label = 'ford Mustang',  
 	soundname = 'fordvoodoo',   
 	},
 
 	[`f10m5`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'f10m5',   
+	turboinstall = true, 
 	label = 'f10m5',  
 	soundname = 'f10m5',   
 	},
@@ -48,23 +43,20 @@ Config.custom_engine = {
 	[`lfasound`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'lfasound',   
 	label = 'LFA V10',  
 	soundname = 'lfasound',   
 	},
 
 	[`elegyx`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'elegyx',   
+	turboinstall = true, 
 	label = 'GTR R35',  
 	soundname = 'elegyx',   
 	},
 
 	[`ta028viper`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'ta028viper',   
+	turboinstall = true, 
 	label = 'Viper V10',  
 	soundname = 'ta028viper',   
 	},
@@ -72,7 +64,6 @@ Config.custom_engine = {
 	[`porsche57v10`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'porsche57v10',   
 	label = 'porsche57 v10',  
 	soundname = 'porsche57v10',   
 	},
@@ -80,23 +71,20 @@ Config.custom_engine = {
 	[`s15sound`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 's15sound',   
 	label = 'S15 SR20',  
 	soundname = 's15sound',   
 	},
 
 	[`gt3rstun`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'gt3rstun',   
+	turboinstall = true, 
 	label = 'Flat 6',  
 	soundname = 'gt3rstun',   
 	},
 
 	[`m297zonda`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'm297zonda',   
+	turboinstall = true, 
 	label = 'Zonda',  
 	soundname = 'm297zonda',   
 	},
@@ -104,7 +92,6 @@ Config.custom_engine = {
 	[`aq06nhonc30a`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'aq06nhonc30a',   
 	label = 'NSX',  
 	soundname = 'aq06nhonc30a',   
 	},
@@ -112,15 +99,13 @@ Config.custom_engine = {
 	[`p60b40`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'p60b40',   
 	label = 'Bmw Engine M3',  
 	soundname = 'p60b40',   
 	},
 
 	[`aqls7raceswap`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'aqls7raceswap',   
+	turboinstall = true, 
 	label = 'C7',  
 	soundname = 'aqls7raceswap',   
 	},
@@ -128,7 +113,6 @@ Config.custom_engine = {
 	[`aqtoy2jzstock`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'aqtoy2jzstock',   
 	label = 'A90 supra',  
 	soundname = 'aqtoy2jzstock',   
 	},
@@ -136,7 +120,6 @@ Config.custom_engine = {
 	[`bgw16`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'bgw16',   
 	label = 'Bugatti W16',  
 	soundname = 'bgw16',   
 	},
@@ -144,7 +127,6 @@ Config.custom_engine = {
 	[`cvpiv8`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'cvpiv8',   
 	label = 'cvpi v8',  
 	soundname = 'cvpiv8',   
 	},
@@ -152,7 +134,6 @@ Config.custom_engine = {
 	[`cw2019`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'cw2019',   
 	label = 'Senna engine',  
 	soundname = 'cw2019',   
 	},
@@ -160,7 +141,6 @@ Config.custom_engine = {
 	[`ea888`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'ea888',   
 	label = 'VW ea888',  
 	soundname = 'ea888',   
 	},
@@ -168,23 +148,20 @@ Config.custom_engine = {
 	[`ecoboostv6`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'ecoboostv6',   
 	label = 'Ford explorer V6',  
 	soundname = 'ecoboostv6',   
 	},
 
 	[`ftypesound`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'ftypesound',   
+	turboinstall = true, 
 	label = 'Ftype engine',  
 	soundname = 'ftypesound',   
 	},
 
 	[`gresleyh`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'gresleyh',   
+	turboinstall = true, 
 	label = 'Supercharged 6.2L V8',  
 	soundname = 'gresleyh',   
 	},
@@ -192,7 +169,6 @@ Config.custom_engine = {
 	[`hemisound`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'hemisound',   
 	label = 'Hemi V8 engine',  
 	soundname = 'hemisound',   
 	},
@@ -200,7 +176,6 @@ Config.custom_engine = {
 	[`lambov10`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'lambov10',   
 	label = 'lambov10',  
 	soundname = 'lambov10',   
 	},
@@ -208,7 +183,6 @@ Config.custom_engine = {
 	[`lgcy04murciv12`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'lgcy04murciv12',   
 	label = 'Lambov12',  
 	soundname = 'lgcy04murciv12',   
 	},
@@ -216,7 +190,6 @@ Config.custom_engine = {
 	[`mbnzc63eng`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'mbnzc63eng',   
 	label = 'c63',  
 	soundname = 'mbnzc63eng',   
 	},
@@ -224,7 +197,6 @@ Config.custom_engine = {
 	[`n4g63t`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'n4g63t',   
 	label = 'Evo engine',  
 	soundname = 'n4g63t',   
 	},
@@ -232,15 +204,13 @@ Config.custom_engine = {
 	[`npcul`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'npcul',   
 	label = 'RRoyce',  
 	soundname = 'npcul',   
 	},
 
 	[`npolchar`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'npolchar',   
+	turboinstall = true, 
 	label = 'charger v8',  
 	soundname = 'npolchar',   
 	},
@@ -248,23 +218,20 @@ Config.custom_engine = {
 	[`s85b50`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 's85b50',   
 	label = 'Victor v8',  
 	soundname = 's85b50',   
 	},
 
 	[`subaruej20`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'subaruej20',   
+	turboinstall = true, 
 	label = 'subaru boxer',  
 	soundname = 'subaruej20',   
 	},
 
 	[`ta488f154`] = {  
 	custom = true,  
-	turboinstall = true,  
-	handlingName = 'ta488f154',   
+	turboinstall = true, 
 	label = 'F88 V8',  
 	soundname = 'ta488f154',   
 	},
@@ -272,7 +239,6 @@ Config.custom_engine = {
 	[`taaud40v8`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'taaud40v8',   
 	label = 'Audi v8',  
 	soundname = 'taaud40v8',   
 	},
@@ -280,7 +246,6 @@ Config.custom_engine = {
 	[`trumpetzr`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'trumpetzr',   
 	label = 'VQ',  
 	soundname = 'trumpetzr',   
 	},
@@ -288,7 +253,6 @@ Config.custom_engine = {
 	[`stratumc`] = {  
 	custom = true,  
 	turboinstall = true,  
-	handlingName = 'stratumc',   
 	label = 'stratumc',  
 	soundname = 'stratumc',   
 	},
