@@ -7,7 +7,6 @@ https://github.com/renzuzu/renzu_engine
 # Feats
 - Custom Engine
 - Custom Sounds
-- Copy Local Vehicle sounds
 - Fully Server sync using Onesync state bags
 - Cleaned and optimized and removed all the useless functions.
 - Saves to database.
