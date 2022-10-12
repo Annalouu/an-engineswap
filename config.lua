@@ -5,11 +5,11 @@ Config.jobonly = true
 Config.enginejob = 'mechanic'
 Config.custom_engine = {
 
-	[`rb26dett`] = {
+	[`r34sound`] = {
 		custom = true,
 		turboinstall = true,
 		handlingName = 'r34sound',
-		label = 'BNR34 RB26DE Twin Turbo',
+		label = 'RB26DE Twin Turbo',
 		soundname = 'r34sound',
 	},
 
