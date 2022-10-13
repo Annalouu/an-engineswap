@@ -1,8 +1,7 @@
 Config = {}
 
 Config.Mysql = 'oxmysql'
-Config.jobonly = true
-Config.enginejob = 'mechanic'
+Config.enginejob = 'yourjob' -- 'mechanic' / 'hayes' / 'whateverthejob u have'
 Config.custom_engine = {
 
 	[`r34sound`] = {
