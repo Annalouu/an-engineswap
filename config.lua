@@ -243,13 +243,6 @@ Config.custom_engine = {
 		soundname = 'trumpetzr',   
 	},
 
-	[`stratumc`] = {  
-		custom = true,  
-		turboinstall = true,  
-		label = 'stratumc',  
-		soundname = 'stratumc',   
-	},
-
 	[`suzukigsx`] = {  
 		custom = true,  
 		turboinstall = true,  
