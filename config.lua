@@ -232,7 +232,7 @@ Config.custom_engine = {
 	[`ta488f154`] = {  
 		custom = true,  
 		turboinstall = true, 
-		label = 'F88 V8',  
+		label = 'F488 V8',  
 		soundname = 'ta488f154',   
 	},
 
