@@ -271,4 +271,11 @@ Config.custom_engine = {
 		soundname = 'tayamahar1',   
 	},
 
+	[`s1000rr`] = {  
+		custom = true,  
+		turboinstall = true,  
+		label = 'bmws1krreng',  
+		soundname = 'bmws1krreng',   
+	},
+
 }
