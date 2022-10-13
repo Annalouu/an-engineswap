@@ -13,9 +13,9 @@ https://github.com/renzuzu/renzu_engine
 
 # Install
 - Installation:
-- Drag an-engine to your resource folder and start at server.cfg
+- Drag an-engine to your resource folder
 - Import engine.sql
-- ensure an-engine (After Qb-core)
+- ensure an-engine in the server.cfg (After Qb-core)
 
 # Image
 ![image](https://cdn.discordapp.com/attachments/837147253562146846/1029785285908766720/unknown.png)
