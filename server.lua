@@ -10,7 +10,7 @@ RegisterCommand("engineswap", function(source, args, rawCommand)
   local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
   c = 0
 
-  if Player.PlayerData.job.name == Config.enginejob and Player.PlayerData.job.isboss then   
+  if Player.PlayerData.job.name == Config.enginejob then  
         print(veh,GetPlayerPed(source))
         local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
             if args[1] ~= nil and veh ~= 0 then
