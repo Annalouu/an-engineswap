@@ -170,7 +170,7 @@ Config.custom_engine = {
 		custom = true,  
 		turboinstall = true,  
 		label = 'Hemi V8 engine',  
-		soundname = 'hemisound',   
+		soundname = 'dodgehemihellcat',   
 	},
 
 	[`lambov10`] = {  
