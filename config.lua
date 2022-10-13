@@ -159,13 +159,6 @@ Config.custom_engine = {
 		soundname = 'ftypesound',   
 	},
 
-	[`gresleyh`] = {  
-		custom = true,  
-		turboinstall = true, 
-		label = 'Supercharged 6.2L V8',  
-		soundname = 'gresleyh',   
-	},
-
 	[`hemisound`] = {  
 		custom = true,  
 		turboinstall = true,  
