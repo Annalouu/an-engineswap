@@ -1,6 +1,7 @@
 Config = {}
 
 Config.Mysql = 'oxmysql'
+Config.IsBoss = false -- if u want only the boss to swap engines (true/false)
 Config.enginejob = 'yourjob' -- 'mechanic' / 'hayes' / 'whateverthejob u have'
 Config.custom_engine = {
 

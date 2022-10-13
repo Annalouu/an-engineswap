@@ -10,7 +10,8 @@ RegisterCommand("engineswap", function(source, args, rawCommand)
   local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
   c = 0
 
-  if Player.PlayerData.job.name == Config.enginejob then  
+  if Player.PlayerData.job.name == Config.enginejob then
+    if Config.IsBoss and not Player.PlayerData.job.isboss then TriggerClientEvent('QBCore:Notify',source,'you are not the boss.' ,"error") return end
         print(veh,GetPlayerPed(source))
         local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
             if args[1] ~= nil and veh ~= 0 then
