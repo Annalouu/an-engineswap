@@ -257,4 +257,18 @@ Config.custom_engine = {
 		soundname = 'stratumc',   
 	},
 
+	[`suzukigsx`] = {  
+		custom = true,  
+		turboinstall = true,  
+		label = 'suzukigsx',  
+		soundname = 'suzukigsxr1k',   
+	},
+
+	[`tayamahar1`] = {  
+		custom = true,  
+		turboinstall = true,  
+		label = 'tayamahar1',  
+		soundname = 'tayamahar1',   
+	},
+
 }
