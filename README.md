@@ -15,6 +15,7 @@ https://github.com/renzuzu/renzu_engine
 - Installation:
 - Drag an-engine to your resource folder
 - Import engine.sql
+- Add the job to the config
 - ensure an-engine in the server.cfg (After Qb-core)
 
 # Image
