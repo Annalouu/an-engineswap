@@ -8,6 +8,7 @@ RegisterCommand("engineswap", function(source, args, rawCommand)
   local PlayerData = Player.PlayerData
   local PlayerJob = PlayerData.job.name
   local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
+  local job = QBCore.Shared.Jobs[Config.enginejob].label
   c = 0
 
   if Player.PlayerData.job.name == Config.enginejob then
@@ -30,7 +31,7 @@ RegisterCommand("engineswap", function(source, args, rawCommand)
             SaveMuffler(plate,args[1])
         end
       else
-        TriggerClientEvent('QBCore:Notify',source,'you are not an expert.' ,"error")
+        TriggerClientEvent('QBCore:Notify',source,'You are not a ' ..job..'' ,"error")
       end
 end, false)
 
