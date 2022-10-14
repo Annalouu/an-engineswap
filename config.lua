@@ -243,6 +243,8 @@ Config.custom_engine = {
 		soundname = 'trumpetzr',   
 	},
 
+	-- bikes
+
 	[`suzukigsx`] = {  
 		custom = true,  
 		turboinstall = true,  
