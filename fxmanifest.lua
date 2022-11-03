@@ -154,3 +154,6 @@ data_file "AUDIO_SYNTHDATA" "audioconfig/bmws1krreng_amp.dat"
 data_file "AUDIO_GAMEDATA" "audioconfig/bmws1krreng_game.dat"
 data_file "AUDIO_SOUNDDATA" "audioconfig/bmws1krreng_sounds.dat"
 data_file "AUDIO_WAVEPACK" "sfx/dlc_bmws1krreng"
+data_file 'AUDIO_GAMEDATA' 'audioconfig/sultanrsv8_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/sultanrsv8_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_v8sultanrs'

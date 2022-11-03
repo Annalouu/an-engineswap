@@ -215,6 +215,12 @@ Config.custom_engine = {
 		soundname = 'trumpetzr',   
 	},
 
+	[`sultanrsv8`] = {  
+		custom = true,
+		label = 'sultanrsv8',  
+		soundname = 'sultanrsv8',   
+	},
+
 	-- bikes
 
 	[`suzukigsx`] = {  
