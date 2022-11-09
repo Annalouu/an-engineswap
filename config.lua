@@ -11,6 +11,12 @@ Config.custom_engine = {
 		soundname = 'r34sound',
 	},
 
+	[`f20c`] = {
+		custom = true,
+		label = 'Civic',
+		soundname = 'f20c',
+	},
+
 	[`aq2jzgterace`] = {
 		custom = true,
 		label = 'Supra 2JZ GTE Twin Turbo',
