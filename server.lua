@@ -40,7 +40,7 @@ RegisterServerEvent("an-engine:server:engine", function(data)
   local PlayerData = Player.PlayerData
   local PlayerJob = PlayerData.job.name
   local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
-  local job = Config.authorizedJob.label
+  local job = Config.authorizedJob
   local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
   local plate = GetVehicleNumberPlateText(veh)
   local engine = data
