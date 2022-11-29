@@ -1,5 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
-mufflers = {}
+Swap = {}
 
 RegisterCommand("engineswap", function(source, args, rawCommand)
   local source = source
@@ -9,26 +9,24 @@ RegisterCommand("engineswap", function(source, args, rawCommand)
   local PlayerJob = PlayerData.job.name
   local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
   local job = QBCore.Shared.Jobs[Config.enginejob].label
-  c = 0
 
   if Player.PlayerData.job.name == Config.enginejob then
     if Config.IsBoss and not Player.PlayerData.job.isboss then TriggerClientEvent('QBCore:Notify',source,'you are not the boss.' ,"error") return end
-        print(veh,GetPlayerPed(source))
         local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
             if args[1] ~= nil and veh ~= 0 then
               plate = GetVehicleNumberPlateText(veh)
-              if mufflers[plate] == nil then
-                mufflers[plate] = {}
+              if Swap[plate] == nil then
+                Swap[plate] = {}
               end
-              mufflers[plate].current = mufflers[plate].muffler or args[1]
-              mufflers[plate].muffler = args[1]
-              mufflers[plate].plate = plate
-              mufflers[plate].engine = args[1]
+              Swap[plate].current = Swap[plate].exhaust or args[1]
+              Swap[plate].exhaust = args[1]
+              Swap[plate].plate = plate
+              Swap[plate].engine = args[1]
               local ent = Entity(veh).state
-              local hash = GetHashKey(mufflers[plate].muffler)
-              ent.muffler = Config.custom_engine[hash] ~= nil and Config.custom_engine[hash].soundname or mufflers[plate].muffler
-              ent.engine = mufflers[plate].engine
-            SaveMuffler(plate,args[1])
+              local hash = GetHashKey(Swap[plate].exhaust)
+              ent.exhaust = Config.custom_engine[hash] ~= nil and Config.custom_engine[hash].soundname or Swap[plate].exhaust
+              ent.engine = Swap[plate].engine
+            Saveexhaust(plate,args[1])
         end
       else
         TriggerClientEvent('QBCore:Notify',source,'You are not a ' ..job..'' ,"error")
@@ -38,65 +36,44 @@ end, false)
 Citizen.CreateThread(function()
   local ret = SqlFunc(Config.Mysql,'fetchAll','SELECT * FROM an_engine', {})
   for k,v in pairs(ret) do
-    mufflers[v.plate] = v
-    mufflers[v.plate].engine = v.muffler
-    mufflers[v.plate].current = v.muffler
+    Swap[v.plate] = v
+    Swap[v.plate].engine = v.exhaust
+    Swap[v.plate].current = v.exhaust
   end
 
   for k,v in ipairs(GetAllVehicles()) do
     local plate = GetVehicleNumberPlateText(v)
-    if mufflers[plate] and plate == mufflers[plate].plate then
+    if Swap[plate] and plate == Swap[plate].plate then
       local ent = Entity(v).state
-      local hash = GetHashKey(mufflers[plate].muffler)
-      ent.muffler = Config.custom_engine[hash] ~= nil and Config.custom_engine[hash].soundname or mufflers[plate].muffler
-      ent.engine = mufflers[plate].engine
+      local hash = GetHashKey(Swap[plate].exhaust)
+      ent.exhaust = Config.custom_engine[hash] ~= nil and Config.custom_engine[hash].soundname or Swap[plate].exhaust
+      ent.engine = Swap[plate].engine
     end
   end
 end)
 
-RegisterNetEvent('an-engine:setmuffler')
-AddEventHandler('an-engine:setmuffler', function(muffler,plate)
-  mufflers[plate] = muffler
+RegisterNetEvent('an-engine:setexhaust', function(exhaust,plate)
+  Swap[plate] = exhaust
 end)
 
-function SaveMuffler(plate,muffler)
+function Saveexhaust(plate,exhaust)
     local plate_ = string.gsub(plate, '^%s*(.-)%s*$', '%1')
     local result = SqlFunc(Config.Mysql,'fetchAll','SELECT * FROM an_engine WHERE TRIM(plate) = @plate', {['@plate'] = plate_})
     if result[1] == nil then
-        SqlFunc(Config.Mysql,'execute','INSERT INTO an_engine (plate, muffler) VALUES (@plate, @engine)', {
+        SqlFunc(Config.Mysql,'execute','INSERT INTO an_engine (plate, exhaust) VALUES (@plate, @engine)', {
             ['@plate']   = plate,
-            ['@engine']   = muffler,
+            ['@engine']   = exhaust,
         })
     elseif result[1] then
-        SqlFunc(Config.Mysql,'execute','UPDATE an_engine SET muffler = @engine WHERE TRIM(plate) = @plate', {
+        SqlFunc(Config.Mysql,'execute','UPDATE an_engine SET exhaust = @engine WHERE TRIM(plate) = @plate', {
             ['@plate'] = plate_,
-            ['@engine'] = muffler,
+            ['@engine'] = exhaust,
         })
     end
 end
 
 function SqlFunc(plugin,type,query,var)
 	local wait = promise.new()
-    if type == 'fetchAll' and plugin == 'mysql-async' then
-		    MySQL.Async.fetchAll(query, var, function(result)
-            wait:resolve(result)
-        end)
-    end
-    if type == 'execute' and plugin == 'mysql-async' then
-        MySQL.Async.execute(query, var, function(result)
-            wait:resolve(result)
-        end)
-    end
-    if type == 'execute' and plugin == 'ghmattisql' then
-        exports['ghmattimysql']:execute(query, var, function(result)
-            wait:resolve(result)
-        end)
-    end
-    if type == 'fetchAll' and plugin == 'ghmattisql' then
-        exports.ghmattimysql:execute(query, var, function(result)
-            wait:resolve(result)
-        end)
-    end
     if type == 'execute' and plugin == 'oxmysql' then
         exports.oxmysql:execute(query, var, function(result)
             wait:resolve(result)
@@ -116,14 +93,14 @@ end
 
 AddEventHandler('entityCreated', function(entity)
   local entity = entity
-  Wait(4000)
+  Wait(1000)
   if DoesEntityExist(entity) and GetEntityPopulationType(entity) == 7 and GetEntityType(entity) == 2 then
     local plate = GetVehicleNumberPlateText(entity)
-    if mufflers[plate] and mufflers[plate].muffler then
+    if Swap[plate] and Swap[plate].exhaust then
       local ent = Entity(entity).state
-      local hash = GetHashKey(mufflers[plate].muffler)
-      ent.muffler = Config.custom_engine[hash] ~= nil and Config.custom_engine[hash].soundname or mufflers[plate].muffler
-      ent.engine = mufflers[plate].engine
+      local hash = GetHashKey(Swap[plate].exhaust)
+      ent.exhaust = Config.custom_engine[hash] ~= nil and Config.custom_engine[hash].soundname or Swap[plate].exhaust
+      ent.engine = Swap[plate].engine
     end
   end
 end)

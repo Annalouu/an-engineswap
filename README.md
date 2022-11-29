@@ -1,9 +1,6 @@
 # An-engine
 - Engine swap script For Qb-core
 
-# Script Based on renzu_engine
-https://github.com/renzuzu/renzu_engine
-
 # Feats
 - Custom Engine
 - Custom Sounds
@@ -16,6 +13,7 @@ https://github.com/renzuzu/renzu_engine
 - Drag an-engine to your resource folder
 - Import engine.sql
 - Add the job to the config
+- True or false if you want only the boss of that job to be able to swap the engine
 - ensure an-engine in the server.cfg (After Qb-core)
 
 # Image
