@@ -10,6 +10,83 @@ RegisterNetEvent("engine:sound", function(name,plate)
     vehicle_sounds[plate].exhaust = name
 end)
 
+CreateThread(function()
+  for k, v in pairs(Config.engineLocations) do -- For every unique name get it's values
+    stancerZone = CircleZone:Create(v["coords"], v["size"], { -- Check the coords and size of the zone
+      name = v["text"], -- Name the zone accordingly
+      heading = v["heading"], -- Get the heading
+      debugPoly = v["debug"], -- See if the user wants to debug
+      useZ = true, -- Use Z Coords aswell
+    })
+    stancerZone:onPlayerInOut(function(isPointInside)
+      if Config.DrawText == "ps-ui" then
+        if isPointInside then
+          local playerPed = PlayerPedId()
+          if IsPedSittingInAnyVehicle(playerPed) then
+            exports[Config.DrawText]:DisplayText(v["inVehicle"]) -- Get the title
+            StartListeningForControl()
+          else
+            exports[Config.DrawText]:DisplayText(v["outVehicle"]) -- Get the title
+          end
+        else
+          exports[Config.DrawText]:HideText('hide')
+          listen = false
+        end
+      else 
+        if isPointInside then
+          local playerPed = PlayerPedId()
+          if IsPedSittingInAnyVehicle(playerPed) then
+            exports[Config.DrawText]:DrawText(v["inVehicle"]) -- Get the title
+            StartListeningForControl()
+          else
+            exports[Config.DrawText]:DrawText(v["outVehicle"]) -- Get the title
+          end
+        else
+          exports[Config.DrawText]:HideText('hide')
+          listen = false
+        end
+      end
+    end)
+  end
+end)
+
+function StartListeningForControl()
+	listen = true
+	InputDisabled = false
+	CreateThread(function()
+		while listen do
+			if IsControlJustReleased(0, 38) and not InputDisabled then -- E
+				Openengine()
+			end
+			Wait(1)
+		end
+	end)
+end
+
+function Openengine()
+  local ped = PlayerPedId()
+  local vehicle = GetVehiclePedIsIn(ped)
+  local plate = GetVehicleNumberPlateText(vehicle)
+	local engine = exports['qb-input']:ShowInput({
+		header = "Vehicle: " ..plate.."",
+		inputs = {
+			{
+				type = 'text',
+				isRequired = false,
+				name = 'engine',
+				text = 'engine'
+			}
+		}
+	})
+
+    if engine ~= nil then
+        if not engine['engine'] then
+            return
+        end
+        TriggerServerEvent("an-engine:server:engine", engine['engine'])
+    end
+end
+
 Citizen.CreateThread(function()
     while true do
       local mycoords = GetEntityCoords(PlayerPedId())

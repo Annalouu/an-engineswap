@@ -8,9 +8,9 @@ RegisterCommand("engineswap", function(source, args, rawCommand)
   local PlayerData = Player.PlayerData
   local PlayerJob = PlayerData.job.name
   local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
-  local job = QBCore.Shared.Jobs[Config.enginejob].label
-
-  if Player.PlayerData.job.name == Config.enginejob then
+  local job = QBCore.Shared.Jobs[Config.authorizedJob].name
+  
+  if Player.PlayerData.job.name == Config.authorizedJob then
     if Config.IsBoss and not Player.PlayerData.job.isboss then TriggerClientEvent('QBCore:Notify',source,'you are not the boss.' ,"error") return end
         local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
             if args[1] ~= nil and veh ~= 0 then
@@ -29,9 +29,44 @@ RegisterCommand("engineswap", function(source, args, rawCommand)
             Saveexhaust(plate,args[1])
         end
       else
-        TriggerClientEvent('QBCore:Notify',source,'You are not a ' ..job..'' ,"error")
+        TriggerClientEvent('QBCore:Notify',source,'You cant do that' ,"error")
       end
 end, false)
+
+RegisterServerEvent("an-engine:server:engine", function(engine)
+  local source = source
+  local ply = Player(source)
+	local Player = QBCore.Functions.GetPlayer(source)
+  local PlayerData = Player.PlayerData
+  local PlayerJob = PlayerData.job.name
+  local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
+  local job = Config.authorizedJob.label
+  local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
+  local plate = GetVehicleNumberPlateText(veh)
+  local engine = engine
+
+  if Player.PlayerData.job.name == Config.authorizedJob then
+    if Config.IsBoss and not Player.PlayerData.job.isboss then TriggerClientEvent('QBCore:Notify',source,'you are not the boss.' ,"error") return end
+        local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
+            if engine ~= nil and veh ~= 0 then
+              plate = GetVehicleNumberPlateText(veh)
+              if Swap[plate] == nil then
+                Swap[plate] = {}
+              end
+              Swap[plate].current = Swap[plate].exhaust or engine
+              Swap[plate].exhaust = engine
+              Swap[plate].plate = plate
+              Swap[plate].engine = engine
+              local ent = Entity(veh).state
+              local hash = GetHashKey(Swap[plate].exhaust)
+              ent.exhaust = Config.custom_engine[hash] ~= nil and Config.custom_engine[hash].soundname or Swap[plate].exhaust
+              ent.engine = Swap[plate].engine
+            Saveexhaust(plate,engine)
+        end
+      else
+        TriggerClientEvent('QBCore:Notify',source,'You cant do that' ,"error")
+      end
+end)
 
 Citizen.CreateThread(function()
   local ret = SqlFunc(Config.Mysql,'fetchAll','SELECT * FROM an_engine', {})

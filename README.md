@@ -16,12 +16,14 @@
 - True or false if you want only the boss of that job to be able to swap the engine
 - ensure an-engine in the server.cfg (After Qb-core)
 
-# Video / image
+# Image
 ![image](https://cdn.discordapp.com/attachments/837147253562146846/1029785285908766720/unknown.png)
-https://www.youtube.com/watch?v=vbsbNt0Zd1c
 
 # Framework Usage: 
 - /engineswap (enginesound)
 
 # dependency 
 - QBcore
+- qb-core(drawtext) / ps-ui(drawtext) / qb-drawtext
+- Polyzone
+- qb-input
