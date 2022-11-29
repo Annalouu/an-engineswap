@@ -18,7 +18,7 @@
 
 # Video / image
 ![image](https://cdn.discordapp.com/attachments/837147253562146846/1029785285908766720/unknown.png)
-![video](https://www.youtube.com/watch?v=vbsbNt0Zd1c)
+https://www.youtube.com/watch?v=vbsbNt0Zd1c
 
 # Framework Usage: 
 - /engineswap (enginesound)
