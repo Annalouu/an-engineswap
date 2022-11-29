@@ -1,5 +1,5 @@
 # An-engine
-- Engine swap script For Qb-core Based on Renzuzu_engine(ESX)
+- Engine swap script For Qb-core
 
 # Feats
 - Custom Engine
