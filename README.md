@@ -7,6 +7,9 @@
 - Fully Server sync using Onesync state bags
 - Cleaned and optimized and removed all the useless functions.
 - Saves to database.
+- Each zone has its own authorized job
+- You can make it so only bosses of the jobs can engine swap
+- You can add more zones for more mechanic shops
 
 # Install
 - Installation:
@@ -18,7 +21,7 @@
 
 # Image
 ![image](https://cdn.discordapp.com/attachments/837147253562146846/1029785285908766720/unknown.png)
-Video: https://youtu.be/LTd5us_Xdt8
+Video: https://youtu.be/jry7129RGro
 
 # Framework Usage: 
 - /engineswap (enginesound)
@@ -27,4 +30,4 @@ Video: https://youtu.be/LTd5us_Xdt8
 - QBcore
 - qb-core(drawtext) / ps-ui(drawtext) / qb-drawtext
 - Polyzone
-- qb-input
+- qb-menu

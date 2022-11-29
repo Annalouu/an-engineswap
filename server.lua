@@ -33,7 +33,7 @@ RegisterCommand("engineswap", function(source, args, rawCommand)
       end
 end, false)
 
-RegisterServerEvent("an-engine:server:engine", function(engine)
+RegisterServerEvent("an-engine:server:engine", function(data)
   local source = source
   local ply = Player(source)
 	local Player = QBCore.Functions.GetPlayer(source)
@@ -43,9 +43,8 @@ RegisterServerEvent("an-engine:server:engine", function(engine)
   local job = Config.authorizedJob.label
   local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
   local plate = GetVehicleNumberPlateText(veh)
-  local engine = engine
+  local engine = data
 
-  if Player.PlayerData.job.name == Config.authorizedJob then
     if Config.IsBoss and not Player.PlayerData.job.isboss then TriggerClientEvent('QBCore:Notify',source,'you are not the boss.' ,"error") return end
         local veh = GetVehiclePedIsIn(GetPlayerPed(source),false)
             if engine ~= nil and veh ~= 0 then
@@ -63,9 +62,6 @@ RegisterServerEvent("an-engine:server:engine", function(engine)
               ent.engine = Swap[plate].engine
             Saveexhaust(plate,engine)
         end
-      else
-        TriggerClientEvent('QBCore:Notify',source,'You cant do that' ,"error")
-      end
 end)
 
 Citizen.CreateThread(function()

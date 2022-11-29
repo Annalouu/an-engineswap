@@ -1,6 +1,15 @@
 QBCore = exports['qb-core']:GetCoreObject()
 
 local vehicle_sounds = {}
+local PlayerJob = QBCore.Functions.GetPlayerData().job
+
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+  PlayerJob = QBCore.Functions.GetPlayerData().job
+end)
+
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
+  PlayerJob = JobInfo
+end)
 
 RegisterNetEvent("engine:sound", function(name,plate)
     if vehicle_sounds[plate] == nil then
@@ -11,41 +20,53 @@ RegisterNetEvent("engine:sound", function(name,plate)
 end)
 
 CreateThread(function()
-  for k, v in pairs(Config.engineLocations) do -- For every unique name get it's values
-    stancerZone = CircleZone:Create(v["coords"], v["size"], { -- Check the coords and size of the zone
-      name = v["text"], -- Name the zone accordingly
-      heading = v["heading"], -- Get the heading
-      debugPoly = v["debug"], -- See if the user wants to debug
-      useZ = true, -- Use Z Coords aswell
-    })
-    stancerZone:onPlayerInOut(function(isPointInside)
-      if Config.DrawText == "ps-ui" then
-        if isPointInside then
-          local playerPed = PlayerPedId()
-          if IsPedSittingInAnyVehicle(playerPed) then
-            exports[Config.DrawText]:DisplayText(v["inVehicle"]) -- Get the title
-            StartListeningForControl()
-          else
-            exports[Config.DrawText]:DisplayText(v["outVehicle"]) -- Get the title
+    for k, v in pairs(Config.engineLocations) do -- For every unique name get it's values
+      QBCore.Functions.GetPlayerData(function(PlayerData)
+        PlayerJob = PlayerData.job
+        swapZone = CircleZone:Create(v["coords"], v["size"], { -- Check the coords and size of the zone
+          name = v["text"], -- Name the zone accordingly
+          heading = v["heading"], -- Get the heading
+          debugPoly = v["debug"], -- See if the user wants to debug
+          PlayerJob = v["authorizedJob"],
+          useZ = true, -- Use Z Coords aswell
+        })
+        swapZone:onPlayerInOut(function(isPointInside)
+          if Config.DrawText == "ps-ui" then
+            if isPointInside then
+              if PlayerJob.name == v["authorizedJob"] then
+                local playerPed = PlayerPedId()
+                if IsPedSittingInAnyVehicle(playerPed) then
+                  exports[Config.DrawText]:DisplayText(v["inVehicle"]) -- Get the title
+                  StartListeningForControl()
+                else
+                  exports[Config.DrawText]:DisplayText(v["outVehicle"]) -- Get the title
+                end
+              else 
+                QBCore.Functions.Notify("You are not qualified", "error")
+              end
+            else
+              exports[Config.DrawText]:HideText('hide')
+              listen = false
+            end
+          else 
+            if isPointInside then
+              if PlayerJob.name == v["authorizedJob"] then
+                local playerPed = PlayerPedId()
+                if IsPedSittingInAnyVehicle(playerPed) then
+                  exports[Config.DrawText]:DrawText(v["inVehicle"]) -- Get the title
+                  StartListeningForControl()
+                else
+                  exports[Config.DrawText]:DrawText(v["outVehicle"]) -- Get the title
+                end
+              else
+                QBCore.Functions.Notify("You are not qualified", "error")
+              end
+            else
+              exports[Config.DrawText]:HideText('hide')
+              listen = false
+            end
           end
-        else
-          exports[Config.DrawText]:HideText('hide')
-          listen = false
-        end
-      else 
-        if isPointInside then
-          local playerPed = PlayerPedId()
-          if IsPedSittingInAnyVehicle(playerPed) then
-            exports[Config.DrawText]:DrawText(v["inVehicle"]) -- Get the title
-            StartListeningForControl()
-          else
-            exports[Config.DrawText]:DrawText(v["outVehicle"]) -- Get the title
-          end
-        else
-          exports[Config.DrawText]:HideText('hide')
-          listen = false
-        end
-      end
+        end)
     end)
   end
 end)
@@ -67,24 +88,13 @@ function Openengine()
   local ped = PlayerPedId()
   local vehicle = GetVehiclePedIsIn(ped)
   local plate = GetVehicleNumberPlateText(vehicle)
-	local engine = exports['qb-input']:ShowInput({
-		header = "Vehicle: " ..plate.."",
-		inputs = {
-			{
-				type = 'text',
-				isRequired = false,
-				name = 'engine',
-				text = 'engine'
-			}
-		}
-	})
-
-    if engine ~= nil then
-        if not engine['engine'] then
-            return
-        end
-        TriggerServerEvent("an-engine:server:engine", engine['engine'])
-    end
+  local enginemenu = {}
+  enginemenu[#enginemenu + 1] = { header = "Engine Swap - Plate: "..plate, isMenuHeader = true }
+  for k, v in pairs(Config.custom_engine) do
+      enginemenu[#enginemenu + 1] = {  header = v.label, params = { isServer = true, event = "an-engine:server:engine", args = v.soundname} }
+  end
+  enginemenu[#enginemenu + 1] = { header = "Close menu.", txt = "", params = { event = "qb-menu:closeMenu" } }
+  exports['qb-menu']:openMenu(enginemenu)
 end
 
 Citizen.CreateThread(function()
