@@ -1,23 +1,42 @@
+--[[ Metadata ]]--
 fx_version 'cerulean'
-game 'gta5'
+games { 'gta5' }
 
-lua54 'on'
+-- [[ Author ]] --
+author 'AnnaLou. <https://discordapp.com/users/585839151564193812>'
+description 'Annalouu | Engine Swap!'
+github 'https://github.com/Annalouu/an-engineswap'
 
-shared_scripts {
-	"config.lua"
+-- [[ Version ]] --
+version '1.0.0'
+
+-- [[ Dependencies ]] --
+dependencies { 
+  'qb-core',
+  'PolyZone',
+}
+
+-- [[ Files ]] --
+shared_scripts { 
+  'shared/*.lua',
 }
 
 server_scripts {
-  '@mysql-async/lib/MySQL.lua',	
-	"server.lua"
+  -- SQL
+  '@mysql-async/lib/MySQL.lua',
+  -- Server Events
+  'server/*.lua',
 }
-client_scripts {
+
+client_scripts { 
+  -- Polyzone
   '@PolyZone/client.lua',
-    '@PolyZone/BoxZone.lua',
-    '@PolyZone/EntityZone.lua',
-    '@PolyZone/CircleZone.lua',
-    '@PolyZone/ComboZone.lua',
-	"client.lua",
+  '@PolyZone/BoxZone.lua',
+  '@PolyZone/EntityZone.lua',
+  '@PolyZone/CircleZone.lua',
+  '@PolyZone/ComboZone.lua',
+  -- Client Events
+  'client/*.lua',
 }
 
 files {
@@ -27,6 +46,10 @@ files {
   'sfx/**/*.awc',
 }
 
+-- [[ Tebex ]] --
+lua54 'yes'
+
+-- [[ Data Files ]] --
 data_file 'AUDIO_GAMEDATA' 'audioconfig/npcul_game.dat'
 data_file 'AUDIO_SOUNDDATA' 'audioconfig/npcul_sounds.dat'
 data_file 'AUDIO_WAVEPACK' 'sfx/dlc_npcul'
