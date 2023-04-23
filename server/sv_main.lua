@@ -40,15 +40,21 @@ RegisterServerEvent("an-engine:server:engine", function(data)
       SaveExhaust(plate, engine)
 
       if Config.Settings['Payments']['UsePayment'] then
-        local moneyType = 'bank'
+        local moneyType = Config.Settings['moneytype']
         local balance = Player.Functions.GetMoney(moneyType)
         if balance >= price then
-          Player.Functions.RemoveMoney(moneyType, price)
-        else
-          if Config.Settings['Payments']['RenewedBanking'] then
-            exports['Renewed-Banking']:handleTransaction(Player.PlayerData.citizenid, "Engine Swap", price, "Swapped Engine by Mechanics", "Los Santos Customs", "" .. Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname .. "", "withdraw")
-            exports['Renewed-Banking']:addAccountMoney(job, price)
+           if moneyType == 'cash' then
+             Player.Functions.RemoveMoney(moneyType, price)
+          else 
+            if Config.Settings['Payments']['RenewedBanking'] then
+              exports['Renewed-Banking']:handleTransaction(Player.PlayerData.citizenid, "Engine Swap", price, "Swapped Engine by Mechanics", "Los Santos Customs", "" .. Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname .. "", "withdraw")
+              exports['Renewed-Banking']:addAccountMoney(job, price)
+            else 
+              Player.Functions.RemoveMoney(moneyType, price)
+            end
           end
+        else
+          TriggerClientEvent('QBCore:Notify', src, "You dont have enough money..", "error")
         end
       end
     end
