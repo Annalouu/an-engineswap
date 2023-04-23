@@ -49,6 +49,7 @@ RegisterServerEvent("an-engine:server:engine", function(data)
             if Config.Settings['Payments']['RenewedBanking'] then
               exports['Renewed-Banking']:handleTransaction(Player.PlayerData.citizenid, "Engine Swap", price, "Swapped Engine by Mechanics", "Los Santos Customs", "" .. Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname .. "", "withdraw")
               exports['Renewed-Banking']:addAccountMoney(job, price)
+              Player.Functions.RemoveMoney(moneyType, price)
             else 
               Player.Functions.RemoveMoney(moneyType, price)
             end
