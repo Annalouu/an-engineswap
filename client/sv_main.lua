@@ -41,7 +41,8 @@ function Openengine(jobName)
 
   for k, v in pairs(Config.Swaps) do
       enginemenu[#enginemenu + 1] = {  
-        header = v.label, 
+        header = v.label,
+	txt = "$ "..v.price,
         params = { 
           isServer = true, 
           event = "an-engine:server:engine", 
