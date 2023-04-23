@@ -2,6 +2,7 @@ Config = {}
 
 Config.Settings = {
   ['sql'] = 'oxmysql', -- Why use anything else?
+  ['moneytype'] = 'bank',
   ['Job'] = {
     ['UseJob'] = true,
     ['BossOnly'] = false,
@@ -9,13 +10,13 @@ Config.Settings = {
   ['Notify'] = 'qb-core', -- qb-core, qb-drawtext, ps-ui
   ['Payments'] = {
     ['UsePayment'] = true,
-    ['RenewedBanking'] = true,
+    ['RenewedBanking'] = false,
   },
 }
 
 Config.engineLocations = {
   ["customsMain"] = { -- THis name should be unique no duplicates
-    ["coords"] = vector3(-321.62, -128.51, 39.02), -- The coords of the zone
+    ["coords"] = vector3(-367.13, -124.73, 38.7), -- The coords of the zone
     ["size"] = 2.0, -- How big is the zone?
     ["heading"] = 0.0, -- Heading
     ["debug"] = false, -- Should zone be debugged?
@@ -72,13 +73,14 @@ Config.Swaps = {
     soundname = 'f10m5',    
   },
   [`lfasound`] = {   	
-    custom = true,  	
+    custom = true, 
+    price = 2500, 	
     label = 'LFA V10',   	
     soundname = 'lfasound',    
   },
   [`elegyx`] = {   	
     custom = true,   	
-    turboinstall = true,  	
+    price = 2500,	
     label = 'GTR R35',   	
     soundname = 'elegyx',    
   },
@@ -90,6 +92,7 @@ Config.Swaps = {
   },
   [`porsche57v10`] = {   	
     custom = true,   	
+    price = 2500,
     label = 'Porsche 57 V10',   	
     soundname = 'porsche57v10',    
   },
@@ -107,12 +110,13 @@ Config.Swaps = {
   },
   [`m297zonda`] = {   	
     custom = true,  	
+    price = 2500,
     label = 'Zonda V12',   	
     soundname = 'm297zonda',    
   },
   [`aq06nhonc30a`] = {   	
     custom = true,   	
-    turboinstall = true,   
+    price = 2500, 
     label = 'NSX',   	
     soundname = 'aq06nhonc30a',    
   },
@@ -130,7 +134,7 @@ Config.Swaps = {
   },
   [`aqtoy2jzstock`] = {   	
     custom = true,   	
-    turboinstall = true,   
+    price = 2500,  
     label = 'Supra 2JZ GTE',   	
     soundname = 'aqtoy2jzstock',    
   },
@@ -147,7 +151,8 @@ Config.Swaps = {
     soundname = 'cvpiv8',    
   },
   [`cw2019`] = {   	
-    custom = true,  	
+    custom = true, 
+    price = 2500, 	
     label = 'Senna engine',   	
     soundname = 'cw2019',    
   },
@@ -165,6 +170,7 @@ Config.Swaps = {
   },
   [`ftypesound`] = {   	
     custom = true,  	
+    price = 2500,
     label = 'Ftype engine',   	
     soundname = 'ftypesound',    
   },
@@ -176,7 +182,7 @@ Config.Swaps = {
   },
   [`lambov10`] = {   	
     custom = true,   	
-    turboinstall = true,   	
+    price = 2500,   	
     label = 'lambo V10',   	
     soundname = 'lambov10',    
   },
@@ -200,7 +206,7 @@ Config.Swaps = {
   },
   [`npcul`] = {   	
     custom = true,   	
-    turboinstall = true,   	
+    price = 2500, 	
     label = 'RRoyce',   	
     soundname = 'npcul',    
   },
@@ -212,7 +218,7 @@ Config.Swaps = {
   },
   [`s85b50`] = {   	
     custom = true,   	
-    turboinstall = true,   	
+    price = 2500,   	
     label = 'Victor V8',   	
     soundname = 's85b50',    
   },
