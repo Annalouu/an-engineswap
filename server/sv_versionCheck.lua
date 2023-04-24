@@ -1,5 +1,5 @@
 --[[ Version Checker ]] --
-local version = "300"
+local version = "310"
 
 local DISCORD_WEBHOOK = ""
 local DISCORD_NAME = "AN - ENGINESWAP"
@@ -12,25 +12,6 @@ AddEventHandler("onResourceStart", function(resource)
 end)
 
 function checkUpdateEmbed(color, name, message, footer)
-    local content = {
-        {
-            ["color"] = color,
-            ["title"] = " " .. name .. " ",
-            ["description"] = message,
-            ["footer"] = {
-                ["text"] = " " .. footer .. " ",
-            },
-        }
-    }
-    PerformHttpRequest(DISCORD_WEBHOOK, function(err, text, headers) end, 
-    'POST', json.encode({
-        username = DISCORD_NAME, 
-        embeds = content, 
-        avatar_url = DISCORD_IMAGE
-    }), { ['Content-Type'] = 'application/json '})
-end
-
-function SettingsEmbed(color, name, message, footer)
     local content = {
         {
             ["color"] = color,

@@ -2,7 +2,6 @@ Config = {}
 
 Config.Settings = {
   ['sql'] = 'oxmysql', -- Why use anything else?
-  ['moneytype'] = 'bank',
   ['Job'] = {
     ['UseJob'] = true,
     ['BossOnly'] = false,
@@ -11,6 +10,7 @@ Config.Settings = {
   ['Payments'] = {
     ['UsePayment'] = true,
     ['RenewedBanking'] = false,
+    ['moneyType'] = 'bank', -- bank, cash
   },
 }
 

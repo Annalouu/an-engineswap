@@ -40,7 +40,7 @@ RegisterServerEvent("an-engine:server:engine", function(data)
       SaveExhaust(plate, engine)
 
       if Config.Settings['Payments']['UsePayment'] then
-        local moneyType = Config.Settings['moneytype']
+        local moneyType = Config.Settings['Payments']['moneyType']
         local balance = Player.Functions.GetMoney(moneyType)
         if balance >= price then
            if moneyType == 'cash' then
@@ -100,13 +100,13 @@ end
 
 function SqlFunc(plugin, type, query, var)
 	local wait = promise.new()
-    if type == 'execute' and plugin == 'oxmysql' then
+    if type == 'execute' and plugin == Config.Settings['sql'] then
         exports.oxmysql:execute(query, var, function(result)
             wait:resolve(result)
         end)
     end
-    if type == 'fetchAll' and plugin == 'oxmysql' then
-		  exports['oxmysql']:fetch(query, var, function(result)
+    if type == 'fetchAll' and plugin == Config.Settings['sql'] then
+		  exports[Config.Settings['sql']]:fetch(query, var, function(result)
 	  	  wait:resolve(result)
 		  end)
     end
