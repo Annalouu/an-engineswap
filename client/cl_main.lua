@@ -68,8 +68,6 @@ end
 
 CreateThread(function()
   for k, v in pairs(Config.engineLocations) do -- For every unique name get it's values
-    QBCore.Functions.GetPlayerData(function(PlayerData)
-      PlayerJob = PlayerData.job
       swapZone = CircleZone:Create(v["coords"], v["size"], { -- Check the coords and size of the zone
         name = v["text"], -- Name the zone accordingly
         heading = v["heading"], -- Get the heading
@@ -114,7 +112,6 @@ CreateThread(function()
           end
         end
       end)
-    end)
   end
 end)
 
