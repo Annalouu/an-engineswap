@@ -76,6 +76,7 @@ CreateThread(function()
         useZ = true, -- Use Z Coords aswell
       })
       swapZone:onPlayerInOut(function(isPointInside)
+	local PlayerJob = QBCore.Functions.GetPlayerData().job
         if Config.Settings['Notify'] == "ps-ui" then
           if isPointInside then
             if PlayerJob.name == v["authorizedJob"] then
