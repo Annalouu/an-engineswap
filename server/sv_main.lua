@@ -4,74 +4,69 @@ Swap = {}
 RegisterServerEvent("an-engine:server:engine", function(data)
   local src = source
 
-  local Player = QBCore.Functions.GetPlayer(src)  
-  local PlayerData = Player.PlayerData
-  local PlayerJob = PlayerData.job.name
-  
+  local Player = QBCore.Functions.GetPlayer(src)
+
   local veh = GetVehiclePedIsIn(GetPlayerPed(src), false)
   local plate = GetVehicleNumberPlateText(veh)
-  
+
   local engine = data.sound
   local price = data.price
   local job = data.job
 
-  if Config.Settings['Job']['UseJob'] and Config.Settings['Job']['BossOnly'] and not Player.PlayerData.job.isboss then 
-    TriggerClientEvent('QBCore:Notify', src ,'you are not the boss.' , "error")  
-  else
-    local veh = GetVehiclePedIsIn(GetPlayerPed(src), false)
-    if engine ~= nil and veh ~= 0 then
-      plate = GetVehicleNumberPlateText(veh)
+  if Config.Settings['Job']['UseJob'] and Config.Settings['Job']['BossOnly'] and not Player.PlayerData.job.isboss then
+    TriggerClientEvent('QBCore:Notify', src ,'you are not the boss.' , "error") 
+  elseif Config.Settings['Payments']['UsePayment'] then
+    local moneyType = Config.Settings['Payments']['moneyType']
+    local balance = Player.Functions.GetMoney(moneyType)
+    if balance >= price then
+      if moneyType == 'cash' then
+        Player.Functions.RemoveMoney(moneyType, price)
+      else
+        if Config.Settings['Payments']['RenewedBanking'] then
+          exports['Renewed-Banking']:handleTransaction(Player.PlayerData.citizenid, "Engine Swap", price, "Swapped Engine by Mechanics", "Los Santos Customs", "" .. Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname .. "", "withdraw")
+          exports['Renewed-Banking']:addAccountMoney(job, price)
 
-      if Swap[plate] == nil then
-        Swap[plate] = {}
-      end
-
-      Swap[plate].current = Swap[plate].exhaust or engine
-      Swap[plate].exhaust = engine
-      Swap[plate].plate = plate
-      Swap[plate].engine = engine
-
-      local ent = Entity(veh).state
-      local hash = GetHashKey(Swap[plate].exhaust)
-
-      ent.exhaust = Config.Swaps[hash] ~= nil and Config.Swaps[hash].soundname or Swap[plate].exhaust
-      ent.engine = Swap[plate].engine
-
-      SaveExhaust(plate, engine)
-
-      if Config.Settings['Payments']['UsePayment'] then
-        local moneyType = Config.Settings['Payments']['moneyType']
-        local balance = Player.Functions.GetMoney(moneyType)
-        if balance >= price then
-           if moneyType == 'cash' then
-             Player.Functions.RemoveMoney(moneyType, price)
-          else 
-            if Config.Settings['Payments']['RenewedBanking'] then
-              exports['Renewed-Banking']:handleTransaction(Player.PlayerData.citizenid, "Engine Swap", price, "Swapped Engine by Mechanics", "Los Santos Customs", "" .. Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname .. "", "withdraw")
-              exports['Renewed-Banking']:addAccountMoney(job, price)
-              Player.Functions.RemoveMoney(moneyType, price)
-            else 
-              Player.Functions.RemoveMoney(moneyType, price)
-            end
-          end
-        else
-          TriggerClientEvent('QBCore:Notify', src, "You dont have enough money..", "error")
+          Player.Functions.RemoveMoney(moneyType, price)
+        else 
+          Player.Functions.RemoveMoney(moneyType, price)
         end
       end
+      if engine ~= nil and veh ~= 0 then
+        plate = GetVehicleNumberPlateText(veh)
+
+        if Swap[plate] == nil then
+          Swap[plate] = {}
+        end
+
+        Swap[plate].current = Swap[plate].exhaust or engine
+        Swap[plate].exhaust = engine
+        Swap[plate].plate = plate
+        Swap[plate].engine = engine
+
+        local ent = Entity(veh).state
+        local hash = GetHashKey(Swap[plate].exhaust)
+
+        ent.exhaust = Config.Swaps[hash] ~= nil and Config.Swaps[hash].soundname or Swap[plate].exhaust
+        ent.engine = Swap[plate].engine
+
+        SaveExhaust(plate, engine)
+      end
+    else
+      TriggerClientEvent('QBCore:Notify', src, "You dont have enough money..", "error")
     end
   end
 end)
 
 CreateThread(function()
   local ret = SqlFunc(Config.Settings['sql'],'fetchAll','SELECT * FROM an_engine', {})
-  
-  for k,v in pairs(ret) do
+
+  for _,v in pairs(ret) do
     Swap[v.plate] = v
     Swap[v.plate].engine = v.exhaust
     Swap[v.plate].current = v.exhaust
   end
 
-  for k,v in ipairs(GetAllVehicles()) do
+  for _,v in ipairs(GetAllVehicles()) do
     local plate = GetVehicleNumberPlateText(v)
     if Swap[plate] and plate == Swap[plate].plate then
       local ent = Entity(v).state
@@ -110,7 +105,7 @@ function SqlFunc(plugin, type, query, var)
 	  	  wait:resolve(result)
 		  end)
     end
-	return Citizen.Await(wait)
+	return Await(wait)
 end
 
 AddEventHandler('entityCreated', function(entity)
