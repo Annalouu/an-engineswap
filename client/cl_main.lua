@@ -33,34 +33,34 @@ function Openengine(jobName)
   local vehicle = GetVehiclePedIsIn(ped)
   local plate = GetVehicleNumberPlateText(vehicle)
   local enginemenu = {}
-  
-  enginemenu[#enginemenu + 1] = { 
-    header = "Engine Swap - Plate: " .. plate, 
-    isMenuHeader = true 
+
+  enginemenu[#enginemenu + 1] = {
+    header = "Engine Swap - Plate: " .. plate,
+    isMenuHeader = true
   }
 
-  for k, v in pairs(Config.Swaps) do
-      enginemenu[#enginemenu + 1] = {  
-        header = v.label,
-	      txt = "$ ".. v.price,
-        params = { 
-          isServer = true, 
-          event = "an-engine:server:engine", 
-          args = {
-            sound = v.soundname,
-            price = v.price,
-            job = jobName,
-          }
-        } 
+  for _, v in pairs(Config.Swaps) do
+    enginemenu[#enginemenu + 1] = {  
+      header = v.label,
+	    txt = "$ ".. v.price,
+      params = {
+        isServer = true, 
+        event = "an-engine:server:engine",
+        args = {
+          sound = v.soundname,
+          price = v.price,
+          job = jobName,
+        }
       }
+    }
   end
 
-  enginemenu[#enginemenu + 1] = { 
-    header = "Close menu.", 
-    txt = "", 
-    params = { 
-      event = "qb-menu:closeMenu" 
-    } 
+  enginemenu[#enginemenu + 1] = {
+    header = "Close menu.",
+    txt = "",
+    params = {
+      event = "qb-menu:closeMenu"
+    }
   }
 
   exports['qb-menu']:openMenu(enginemenu)
@@ -80,16 +80,26 @@ CreateThread(function()
       swapZone:onPlayerInOut(function(isPointInside)
         if Config.Settings['Notify'] == "ps-ui" then
           if isPointInside then
-            if PlayerJob.name == v["authorizedJob"] then
+            if Config.Settings['Job']['UseJob'] then
+              if PlayerJob.name == v["authorizedJob"] then
+                local playerPed = PlayerPedId()
+                if IsPedSittingInAnyVehicle(playerPed) then
+                  exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                  StartListeningForControl(v["authorizedJob"])
+                else
+                  exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+                end
+              else 
+                QBCore.Functions.Notify("You are not qualified", "error")
+              end
+            else
               local playerPed = PlayerPedId()
               if IsPedSittingInAnyVehicle(playerPed) then
                 exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
-                StartListeningForControl(v["authorizedJob"])
+                StartListeningForControl('mechanic')
               else
                 exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
               end
-            else 
-              QBCore.Functions.Notify("You are not qualified", "error")
             end
           else
             exports[Config.Settings['Notify']]:HideText('hide')
@@ -97,16 +107,26 @@ CreateThread(function()
           end
         else 
           if isPointInside then
-            if PlayerJob.name == v["authorizedJob"] then
-              local playerPed = PlayerPedId()
-              if IsPedSittingInAnyVehicle(playerPed) then
-                exports[Config.Settings['Notify']]:DrawText(v["inVehicle"]) -- Get the title
-                StartListeningForControl(v["authorizedJob"])
-              else
-                exports[Config.Settings['Notify']]:DrawText(v["outVehicle"]) -- Get the title
+            if Config.Settings['Job']['UseJob'] then
+              if PlayerJob.name == v["authorizedJob"] then
+                local playerPed = PlayerPedId()
+                if IsPedSittingInAnyVehicle(playerPed) then
+                  exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                  StartListeningForControl(v["authorizedJob"])
+                else
+                  exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+                end
+              else 
+                QBCore.Functions.Notify("You are not qualified", "error")
               end
             else
-              QBCore.Functions.Notify("You are not qualified", "error")
+              local playerPed = PlayerPedId()
+              if IsPedSittingInAnyVehicle(playerPed) then
+                exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                StartListeningForControl('mechanic')
+              else
+                exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+              end
             end
           else
             exports[Config.Settings['Notify']]:HideText('hide')
