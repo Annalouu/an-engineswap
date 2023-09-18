@@ -40,7 +40,7 @@ function Openengine(jobName)
   }
 
   for _, v in pairs(Config.Swaps) do
-    enginemenu[#enginemenu + 1] = {  
+    enginemenu[#enginemenu + 1] = {
       header = v.label,
 	    txt = "$ ".. v.price,
       params = {
@@ -67,7 +67,7 @@ function Openengine(jobName)
 end
 
 CreateThread(function()
-  for k, v in pairs(Config.engineLocations) do -- For every unique name get it's values
+  for _, v in pairs(Config.engineLocations) do -- For every unique name get it's values
     QBCore.Functions.GetPlayerData(function(PlayerData)
       PlayerJob = PlayerData.job
       swapZone = CircleZone:Create(v["coords"], v["size"], { -- Check the coords and size of the zone
@@ -105,7 +105,7 @@ CreateThread(function()
             exports[Config.Settings['Notify']]:HideText('hide')
             listen = false
           end
-        else 
+        else
           if isPointInside then
             if Config.Settings['Job']['UseJob'] then
               if PlayerJob.name == v["authorizedJob"] then
@@ -141,7 +141,7 @@ end)
 CreateThread(function()
     while true do
       local mycoords = GetEntityCoords(PlayerPedId())
-      for k,v in pairs(GetGamePool('CVehicle')) do
+      for _,v in pairs(GetGamePool('CVehicle')) do
           local veh = Entity(v).state
           if #(mycoords - GetEntityCoords(v, false)) < 100 and veh and veh.exhaust and veh.engine then
             local plate = GetVehicleNumberPlateText(v)
