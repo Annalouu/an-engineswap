@@ -33,41 +33,43 @@ function Openengine(jobName)
   local vehicle = GetVehiclePedIsIn(ped)
   local plate = GetVehicleNumberPlateText(vehicle)
   local enginemenu = {}
-  
-  enginemenu[#enginemenu + 1] = { 
-    header = "Engine Swap - Plate: " .. plate, 
-    isMenuHeader = true 
+
+  enginemenu[#enginemenu + 1] = {
+    header = "Engine Swap - Plate: " .. plate,
+    isMenuHeader = true
   }
 
-  for k, v in pairs(Config.Swaps) do
-      enginemenu[#enginemenu + 1] = {  
-        header = v.label,
-	txt = "$ ".. v.price,
-        params = { 
-          isServer = true, 
-          event = "an-engine:server:engine", 
-          args = {
-            sound = v.soundname,
-            price = v.price,
-            job = jobName,
-          }
-        } 
+  for _, v in pairs(Config.Swaps) do
+    enginemenu[#enginemenu + 1] = {
+      header = v.label,
+	    txt = "$ ".. v.price,
+      params = {
+        isServer = true, 
+        event = "an-engine:server:engine",
+        args = {
+          sound = v.soundname,
+          price = v.price,
+          job = jobName,
+        }
       }
+    }
   end
 
-  enginemenu[#enginemenu + 1] = { 
-    header = "Close menu.", 
-    txt = "", 
-    params = { 
-      event = "qb-menu:closeMenu" 
-    } 
+  enginemenu[#enginemenu + 1] = {
+    header = "Close menu.",
+    txt = "",
+    params = {
+      event = "qb-menu:closeMenu"
+    }
   }
 
   exports['qb-menu']:openMenu(enginemenu)
 end
 
 CreateThread(function()
-  for k, v in pairs(Config.engineLocations) do -- For every unique name get it's values
+  for _, v in pairs(Config.engineLocations) do -- For every unique name get it's values
+    QBCore.Functions.GetPlayerData(function(PlayerData)
+      PlayerJob = PlayerData.job
       swapZone = CircleZone:Create(v["coords"], v["size"], { -- Check the coords and size of the zone
         name = v["text"], -- Name the zone accordingly
         heading = v["heading"], -- Get the heading
@@ -76,36 +78,55 @@ CreateThread(function()
         useZ = true, -- Use Z Coords aswell
       })
       swapZone:onPlayerInOut(function(isPointInside)
-	local PlayerJob = QBCore.Functions.GetPlayerData().job
         if Config.Settings['Notify'] == "ps-ui" then
           if isPointInside then
-            if PlayerJob.name == v["authorizedJob"] then
+            if Config.Settings['Job']['UseJob'] then
+              if PlayerJob.name == v["authorizedJob"] then
+                local playerPed = PlayerPedId()
+                if IsPedSittingInAnyVehicle(playerPed) then
+                  exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                  StartListeningForControl(v["authorizedJob"])
+                else
+                  exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+                end
+              else 
+                QBCore.Functions.Notify("You are not qualified", "error")
+              end
+            else
               local playerPed = PlayerPedId()
               if IsPedSittingInAnyVehicle(playerPed) then
                 exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
-                StartListeningForControl(v["authorizedJob"])
+                StartListeningForControl('mechanic')
               else
                 exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
               end
-            else 
-              QBCore.Functions.Notify("You are not qualified", "error")
             end
           else
             exports[Config.Settings['Notify']]:HideText('hide')
             listen = false
           end
-        else 
+        else
           if isPointInside then
-            if PlayerJob.name == v["authorizedJob"] then
-              local playerPed = PlayerPedId()
-              if IsPedSittingInAnyVehicle(playerPed) then
-                exports[Config.Settings['Notify']]:DrawText(v["inVehicle"]) -- Get the title
-                StartListeningForControl(v["authorizedJob"])
-              else
-                exports[Config.Settings['Notify']]:DrawText(v["outVehicle"]) -- Get the title
+            if Config.Settings['Job']['UseJob'] then
+              if PlayerJob.name == v["authorizedJob"] then
+                local playerPed = PlayerPedId()
+                if IsPedSittingInAnyVehicle(playerPed) then
+                  exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                  StartListeningForControl(v["authorizedJob"])
+                else
+                  exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+                end
+              else 
+                QBCore.Functions.Notify("You are not qualified", "error")
               end
             else
-              QBCore.Functions.Notify("You are not qualified", "error")
+              local playerPed = PlayerPedId()
+              if IsPedSittingInAnyVehicle(playerPed) then
+                exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                StartListeningForControl('mechanic')
+              else
+                exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+              end
             end
           else
             exports[Config.Settings['Notify']]:HideText('hide')
@@ -113,13 +134,14 @@ CreateThread(function()
           end
         end
       end)
+    end)
   end
 end)
 
 CreateThread(function()
     while true do
       local mycoords = GetEntityCoords(PlayerPedId())
-      for k,v in pairs(GetGamePool('CVehicle')) do
+      for _,v in pairs(GetGamePool('CVehicle')) do
           local veh = Entity(v).state
           if #(mycoords - GetEntityCoords(v, false)) < 100 and veh and veh.exhaust and veh.engine then
             local plate = GetVehicleNumberPlateText(v)

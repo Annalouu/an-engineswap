@@ -14,7 +14,7 @@ RegisterServerEvent("an-engine:server:engine", function(data)
   local job = data.job
 
   if Config.Settings['Job']['UseJob'] and Config.Settings['Job']['BossOnly'] and not Player.PlayerData.job.isboss then
-    TriggerClientEvent('QBCore:Notify', src ,'you are not the boss.' , "error") 
+    TriggerClientEvent('QBCore:Notify', src ,'you are not the boss.' , "error")
   elseif Config.Settings['Payments']['UsePayment'] then
     local moneyType = Config.Settings['Payments']['moneyType']
     local balance = Player.Functions.GetMoney(moneyType)
@@ -95,17 +95,20 @@ end
 
 function SqlFunc(plugin, type, query, var)
 	local wait = promise.new()
-    if type == 'execute' and plugin == Config.Settings['sql'] then
-        exports.oxmysql:execute(query, var, function(result)
-            wait:resolve(result)
-        end)
-    end
-    if type == 'fetchAll' and plugin == Config.Settings['sql'] then
-		  exports[Config.Settings['sql']]:fetch(query, var, function(result)
-	  	  wait:resolve(result)
-		  end)
-    end
-	return Await(wait)
+
+  if type == 'execute' and plugin == Config.Settings['sql'] then
+      exports.oxmysql:execute(query, var, function(result)
+          wait:resolve(result)
+      end)
+  end
+
+  if type == 'fetchAll' and plugin == Config.Settings['sql'] then
+	  exports[Config.Settings['sql']]:fetch(query, var, function(result)
+		  wait:resolve(result)
+	  end)
+  end
+
+	return Citizen.Await(wait)
 end
 
 AddEventHandler('entityCreated', function(entity)

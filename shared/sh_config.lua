@@ -3,10 +3,10 @@ Config = {}
 Config.Settings = {
   ['sql'] = 'oxmysql', -- Why use anything else?
   ['Job'] = {
-    ['UseJob'] = true,
+    ['UseJob'] = false,
     ['BossOnly'] = false,
   },
-  ['Notify'] = 'qb-core', -- qb-core, qb-drawtext, ps-ui
+  ['Notify'] = 'ps-ui', -- qb-core, qb-drawtext, ps-ui
   ['Payments'] = {
     ['UsePayment'] = true,
     ['RenewedBanking'] = false,
@@ -15,6 +15,15 @@ Config.Settings = {
 }
 
 Config.engineLocations = {
+  ["TestingZone"] = { -- THis name should be unique no duplicates
+    ["coords"] = vector3(1172.31, 2661.94, 37.99), -- The coords of the zone
+    ["size"] = 10.0, -- How big is the zone?
+    ["heading"] = 0.0, -- Heading
+    ["debug"] = false, -- Should zone be debugged?
+    ["authorizedJob"] = "mechanic", -- job authorized to engine swap
+    ["inVehicle"] = "Press E to engineswap", -- The name if a user is in a vehicle
+    ["outVehicle"] = "You need to be in a vehicle!", -- Message if user is not in a vehicle
+  },
   ["customsMain"] = { -- THis name should be unique no duplicates
     ["coords"] = vector3(-367.13, -124.73, 38.7), -- The coords of the zone
     ["size"] = 2.0, -- How big is the zone?
