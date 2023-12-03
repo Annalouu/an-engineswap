@@ -84,10 +84,10 @@ CreateThread(function()
               if PlayerJob.name == v["authorizedJob"] then
                 local playerPed = PlayerPedId()
                 if IsPedSittingInAnyVehicle(playerPed) then
-                  exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                  exports[Config.Settings['Notify']]:DrawText(v["inVehicle"]) -- Get the title
                   StartListeningForControl(v["authorizedJob"])
                 else
-                  exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+                  exports[Config.Settings['Notify']]:DrawText(v["outVehicle"]) -- Get the title
                 end
               else 
                 QBCore.Functions.Notify("You are not qualified", "error")
@@ -95,10 +95,10 @@ CreateThread(function()
             else
               local playerPed = PlayerPedId()
               if IsPedSittingInAnyVehicle(playerPed) then
-                exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                exports[Config.Settings['Notify']]:DrawText(v["inVehicle"]) -- Get the title
                 StartListeningForControl('mechanic')
               else
-                exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+                exports[Config.Settings['Notify']]:DrawText(v["outVehicle"]) -- Get the title
               end
             end
           else
@@ -111,10 +111,10 @@ CreateThread(function()
               if PlayerJob.name == v["authorizedJob"] then
                 local playerPed = PlayerPedId()
                 if IsPedSittingInAnyVehicle(playerPed) then
-                  exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                  exports[Config.Settings['Notify']]:DrawText(v["inVehicle"]) -- Get the title
                   StartListeningForControl(v["authorizedJob"])
                 else
-                  exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+                  exports[Config.Settings['Notify']]:DrawText(v["outVehicle"]) -- Get the title
                 end
               else 
                 QBCore.Functions.Notify("You are not qualified", "error")
@@ -122,10 +122,10 @@ CreateThread(function()
             else
               local playerPed = PlayerPedId()
               if IsPedSittingInAnyVehicle(playerPed) then
-                exports[Config.Settings['Notify']]:DisplayText(v["inVehicle"]) -- Get the title
+                exports[Config.Settings['Notify']]:DrawText(v["inVehicle"]) -- Get the title
                 StartListeningForControl('mechanic')
               else
-                exports[Config.Settings['Notify']]:DisplayText(v["outVehicle"]) -- Get the title
+                exports[Config.Settings['Notify']]:DrawText(v["outVehicle"]) -- Get the title
               end
             end
           else
