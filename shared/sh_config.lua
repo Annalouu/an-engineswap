@@ -6,7 +6,7 @@ Config.Settings = {
     ['UseJob'] = false,
     ['BossOnly'] = false,
   },
-  ['Notify'] = 'qb-core', -- qb-core, qb-drawtext, ps-ui(if you going to use ps-ui you will need to change the Drawtext to Displaytext)
+  ['Notify'] = 'qb-core', -- qb-core, qb-drawtext, ps-ui(if you going to use ps-ui you will need to change the Drawtext to Displaytext in the client)
   ['Payments'] = {
     ['UsePayment'] = true,
     ['RenewedBanking'] = false,
