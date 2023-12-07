@@ -12,34 +12,28 @@ version '1.0.0'
 
 -- [[ Dependencies ]] --
 dependencies { 
-  'qb-core',
-  'PolyZone',
+  'ox_lib',
 }
 
 -- [[ Files ]] --
-shared_scripts { 
+shared_scripts {
+  '@ox_lib/init.lua',
+  'bridge/*.lua',
   'shared/*.lua',
 }
 
 server_scripts {
-  -- SQL
-  '@mysql-async/lib/MySQL.lua',
   -- Server Events
   'server/*.lua',
 }
 
 client_scripts { 
-  -- Polyzone
-  '@PolyZone/client.lua',
-  '@PolyZone/BoxZone.lua',
-  '@PolyZone/EntityZone.lua',
-  '@PolyZone/CircleZone.lua',
-  '@PolyZone/ComboZone.lua',
   -- Client Events
   'client/*.lua',
 }
 
 files {
+  'data/*.lua',
   'audioconfig/*.dat151.rel',
   'audioconfig/*.dat54.rel',
   'sfx/**/*.awc',
