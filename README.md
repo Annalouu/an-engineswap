@@ -26,3 +26,8 @@ Video: https://youtu.be/jry7129RGro
 - ox_lib
 - QBcore & ESX
 
+# Credits
+Thanks to these people to contribute.
+
+- Thanks to https://github.com/SerenaKing for doing some refactoring after the initial release.
+- Thanks to https://github.com/reyyghi for refactoring and ESX compatibility.
