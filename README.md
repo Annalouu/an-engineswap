@@ -7,6 +7,8 @@
 - Custom Sounds
 - Fully Server sync using Onesync state bags
 - Cleaned and optimized and removed all the useless functions.
+- Create a new zone using the command ```/createzone``` in the game
+- View a list of all zones using the command ```/zonelist```
 - Each zone has its own authorized job
 - You can make it so only bosses of the jobs can engine swap
 - You can add more zones for more mechanic shops
