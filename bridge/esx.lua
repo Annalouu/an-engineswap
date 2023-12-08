@@ -16,7 +16,9 @@ end
 
 if isServer then
     function Core.getPlayer ( source )
-        PlayerData[source] = ESX.GetPlayerFromId(source)
+        if not PlayerData[source] then
+            PlayerData[source] = ESX.GetPlayerFromId(source)
+        end
         return PlayerData[source]
     end
 
@@ -54,4 +56,8 @@ if isServer then
             return Player.job.grade
         end
     end
+
+    RegisterNetEvent('esx:playerLoaded', function(player, xPlayer, isNew)
+        TriggerEvent("an-engineswap:server:loadData", xPlayer.source)
+    end)
 end

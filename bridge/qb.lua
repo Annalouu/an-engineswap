@@ -16,7 +16,9 @@ end
 
 if isServer then
     function Core.getPlayer ( source )
-        PlayerData[source] = QBCore.Functions.GetPlayer(source)
+        if not PlayerData[source] then
+            PlayerData[source] = QBCore.Functions.GetPlayer(source)
+        end
         return PlayerData[source]
     end
 
@@ -48,4 +50,9 @@ if isServer then
             return Player.PlayerData.job.grade.level
         end
     end
+
+    RegisterNetEvent('QBCore:Server:OnPlayerLoaded', function()
+        local Player = Core.getPlayer(source)
+        TriggerEvent("an-engineswap:server:loadData", Player.PlayerData.source)
+    end)
 end
