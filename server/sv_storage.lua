@@ -1,0 +1,48 @@
+function SaveFileData(FileData, Path, Type)
+    local result = {}
+
+    if Type == "install" then
+        for plate, data in pairs(FileData) do
+            if FileData[plate] then
+              local plate_ = string.gsub(plate, '^%s*(.-)%s*$', '%1')
+              result[#result + 1] = ('\t["%s"] = {\n\t    exhaust = "%s",\n\t    category = "%s",\n\t},\n'):format(
+              plate_, data.exhaust, data.category)
+            end
+        end
+    elseif Type == "zone" then
+        for _, data in ipairs(FileData) do
+            local coordsStr = string.format('vector3(%f, %f, %f)', data.coords.x, data.coords.y, data.coords.z)
+
+            local groupsStr = nil
+
+            if data.groups then
+                if type(data.groups) == "table" then
+                    if table.type(data.groups) == "hash" then
+                        groupsStr = '{'
+                        for group, level in pairs(data.groups) do
+                            groupsStr = groupsStr .. string.format('["%s"] = %s,', group, level)
+                        end
+                        groupsStr = groupsStr .. '}'
+                    elseif table.type(data.groups) == "array" then
+                        groupsStr = '{'
+                        for _, group in pairs(data.groups) do
+                            groupsStr = groupsStr .. string.format('"%s",', group)
+                        end
+                        groupsStr = groupsStr .. '}'
+                    end
+                else
+                    groupsStr = ('"%s"'):format(data.groups)
+                end
+            end
+        
+            local drawTextStr = string.format('drawtext = { inveh = "%s", outveh = "%s" }', data.drawtext.inveh, data.drawtext.outveh)
+        
+            result[#result + 1] = string.format('\t{\n\t\tcoords = %s,\n\t\tradius = %f,\n\t\tgroups = %s,\n\t\tdebug = %s,\n\t\t%s\n\t},\n',
+            coordsStr, data.radius, groupsStr, tostring(data.debug), drawTextStr)
+        end
+    end
+  
+    local DataTable = ('return {\n%s\n}'):format(table.concat(result, ""))
+    SaveResourceFile(GetCurrentResourceName(), ('data/%s.lua'):format(Path), DataTable, -1)
+end
+
