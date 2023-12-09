@@ -136,7 +136,7 @@ RegisterNetEvent('an-engineswap:client:creteZone', function( )
                     debug = input[3],
                     drawtext = {
                         inveh = input[1]:len() > 0 and input[1] or "Press E to engineswap",
-                        outveh = input[1]:len() > 0 and input[1] or "You need to be in a vehicle!"
+                        outveh = input[2]:len() > 0 and input[2] or "You need to be in a vehicle!"
                     }
                 }
                 if input[4] then
