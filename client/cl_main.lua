@@ -37,7 +37,7 @@ end
 ---@param Category string
 ---@param JobData any
 ---@return table
-local function CreateCategoryMenu ( Category, JobData )
+local function CreateCategoryMenu ( Category, JobData, adminView )
     local dataToSend = {}
     if Category == "car" then
         dataToSend = {
@@ -58,12 +58,65 @@ local function CreateCategoryMenu ( Category, JobData )
                     title = data.label,
                     description = ("Price: %s"):format(data.price),
                     onSelect = function ()
-                        TriggerServerEvent("an-engine:server:engine", {
-                            sound = index,
-                            price = data.price,
-                            category = Category,
-                            job = JobData
-                        })
+                        if adminView then
+                            local adminContextCar = {
+                                id = "admin_context",
+                                title = data.label,
+                                menu = "carsound_list",
+                                onBack = function ()
+                                
+                                end,
+                                options = {
+                                    {
+                                        title = "Change Label",
+                                        icon = "pen-to-square",
+                                        onSelect = function ()
+                                            local input = lib.inputDialog(('Change Label [%s]'):format(index), {
+                                                { type = 'input', label = 'New Label', placeholder = '', required = true, min = 1 },
+                                            })
+                                            
+                                            if input then
+                                                Sound[Category][index].label = input[1]
+                                                TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+                                                Utils.Notify({msg = "Sound label has been successfully changed", type = "success", duration = 8000})
+                                            end
+                                        end
+                                    },
+                                    {
+                                        title = "Change Price",
+                                        icon = "pen-to-square",
+                                        onSelect = function ()
+                                            local input = lib.inputDialog(('Change Price [%s]'):format(index), {
+                                                { type = 'number', label = 'New Price', placeholder = '', required = true, min = 1 },
+                                            })
+                                            
+                                            if input then
+                                                Sound[Category][index].price = input[1]
+                                                TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+                                                Utils.Notify({msg = ("The sound price has been successfully changed to $%s"):format(tonumber((input[1]))), type = "success", duration = 8000})
+                                            end
+                                        end
+                                    },
+                                    {
+                                        title = "Delete Sound",
+                                        icon = "trash",
+                                        onSelect = function ()
+                                            Sound[Category][index] = nil
+                                            TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+                                            Utils.Notify({msg = "Sound successfully deleted", "success", 8000})
+                                        end
+                                    }
+                                }
+                            }
+                            Utils.createContext(adminContextCar)
+                        else
+                            TriggerServerEvent("an-engine:server:engine", {
+                                sound = index,
+                                price = data.price,
+                                category = Category,
+                                job = JobData
+                            })
+                        end
                     end
                 }
             end
@@ -90,12 +143,65 @@ local function CreateCategoryMenu ( Category, JobData )
                     title = data.label,
                     description = ("Price: %s"):format(data.price),
                     onSelect = function ()
-                        TriggerServerEvent("an-engine:server:engine", {
-                            sound = index,
-                            price = data.price,
-                            category = Category,
-                            job = JobData
-                        })
+                        if adminView then
+                            local adminContextMotorcycle = {
+                                id = "admin_context",
+                                title = data.label,
+                                menu = "motorcyclesound_list",
+                                onBack = function ()
+                                
+                                end,
+                                options = {
+                                    {
+                                        title = "Change Label",
+                                        icon = "pen-to-square",
+                                        onSelect = function ()
+                                            local input = lib.inputDialog(('Change Label [%s]'):format(index), {
+                                                { type = 'input', label = 'New Label', placeholder = '', required = true, min = 1 },
+                                            })
+                                            
+                                            if input then
+                                                Sound[Category][index].label = input[1]
+                                                TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+                                                Utils.Notify({msg = "Sound label has been successfully changed", "success", 8000})
+                                            end
+                                        end
+                                    },
+                                    {
+                                        title = "Change Price",
+                                        icon = "pen-to-square",
+                                        onSelect = function ()
+                                            local input = lib.inputDialog(('Change Price [%s]'):format(index), {
+                                                { type = 'number', label = 'New Price', placeholder = '', required = true, min = 1 },
+                                            })
+                                            
+                                            if input then
+                                                Sound[Category][index].price = input[1]
+                                                TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+                                                Utils.Notify({msg = ("The sound price has been successfully changed to $%s"):format(tonumber((input[1]))), type = "success", duration = 8000})
+                                            end
+                                        end
+                                    },
+                                    {
+                                        title = "Delete Sound",
+                                        icon = "trash",
+                                        onSelect = function ()
+                                            Sound[Category][index] = nil
+                                            TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+                                            Utils.Notify({msg = "Sound successfully deleted", "success", 8000})
+                                        end
+                                    }
+                                }
+                            }
+                            Utils.createContext(adminContextMotorcycle)
+                        else
+                            TriggerServerEvent("an-engine:server:engine", {
+                                sound = index,
+                                price = data.price,
+                                category = Category,
+                                job = JobData
+                            })
+                        end
                     end
                 }
             end
@@ -118,6 +224,19 @@ local function Openengine( Job )
     for category, data in pairs(Sound) do
         enginemenu.options[#enginemenu.options+1] = CreateCategoryMenu(category, Job)
     end
+
+    enginemenu.options[#enginemenu.options+1] = {
+        title = "Install default sound",
+        description = ("Price: $%s"):format(Config.defaultSoundPrice),
+        icon = "circle-question",
+        onSelect = function ()
+            TriggerServerEvent("an-engine:server:engine", {
+                sound = "default",
+                price = Config.defaultSoundPrice,
+                setDefualt = true
+            })
+        end
+    }
     Utils.createContext(enginemenu)
 end
 
@@ -202,13 +321,17 @@ lib.onCache('vehicle', function(value)
 end)
 
 -- [[ Event ]]
-RegisterNetEvent('an-engineswap:client:loadData', function ( FileData )
+RegisterNetEvent('an-engineswap:client:loadData', function ( FileData, updateSound )
     if FileData.sound then
         Sound = FileData.sound
     end
 
     if FileData.zone then
         Locations = FileData.zone
+    end
+
+    if updateSound then return
+
     end
 
     LoadZone()
@@ -233,28 +356,83 @@ RegisterNetEvent('an-engineswap:client:listCreatedZone', function()
                     
                     end,
                     options = {
-                    {
-                        title = "Teleport To Location",
-                        icon = "location-dot",
-                        onSelect = function ()
-                        DoScreenFadeOut(500)
-                        Wait(1000)
-                        SetPedCoordsKeepVehicle(cache.ped, data.coords.x, data.coords.y, data.coords.z)
-                        DoScreenFadeIn(500)
-                        end
-                    },
-                    {
-                        title = "Delete Location",
-                        icon = "trash",
-                        onSelect = function ()
-                        Locations[index] = nil
-                        TriggerServerEvent("an-engineswap:server:saveZoneData", Locations, "update")
-                        end
-                    }
+                        {
+                            title = "Teleport To Location",
+                            icon = "location-dot",
+                            onSelect = function ()
+                                DoScreenFadeOut(500)
+                                Wait(1000)
+                                SetPedCoordsKeepVehicle(cache.ped, data.coords.x, data.coords.y, data.coords.z)
+                                DoScreenFadeIn(500)
+                            end
+                        },
+                        {
+                            title = "Delete Location",
+                            icon = "trash",
+                            onSelect = function ()
+                                Locations[index] = nil
+                                TriggerServerEvent("an-engineswap:server:saveZoneData", Locations, "update")
+                            end
+                        }
                     }
                 })
             end
         }
     end
     Utils.createContext(context)
+end)
+
+RegisterNetEvent("an-engineswap:client:addSound", function ()
+
+    ::back::
+
+    local input = lib.inputDialog('New Sound', {
+        { type = 'input', label = 'Sound Name', placeholder = '', required = true, min = 1 },
+        { type = 'input', label = 'Sound Label', placeholder = '', required = true, min = 1 },
+        { type = 'number', label = 'Price', required = true, min = 1 },
+        { type = 'select', label = 'Type', options = {
+            { value = "car" },
+            { value = "motorcycle" }
+        }, required = true }
+    })
+
+    if input then
+        local Data = {
+            type = input[4],
+            name = input[1],
+            label = input[2],
+            price = input[3]
+        }
+
+        if Sound[Data.type][Data.name] then
+            Utils.Notify({msg = "This sound is already in the engine swap list !", type = "error", duration = 8000})
+            goto back
+        end
+
+        if string.find(Data.name, "%s") then
+            Utils.Notify({msg = "Sound names cannot use spaces !", type = "error", duration = 8000})
+            goto back
+        end
+
+        Sound[Data.type][Data.name] = {
+            label = Data.label,
+            price = Data.price
+        }
+
+        Utils.Notify({msg = "Successfully added a new sound to the list of engine swap sounds", type = "success", duration = 8000})
+        TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+    end
+end)
+
+
+RegisterNetEvent('an-engineswap:client:listAllSound', function ()
+    local enginemenuAdmin = {
+        id = "engine_menu",
+        title = "Sound List",
+        options = {}
+    }
+    for category, data in pairs(Sound) do
+        enginemenuAdmin.options[#enginemenuAdmin.options+1] = CreateCategoryMenu(category, nil, true)
+    end
+    Utils.createContext(enginemenuAdmin)
 end)
