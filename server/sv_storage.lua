@@ -2,12 +2,22 @@ function SaveFileData(FileData, Path, Type)
     local result = {}
 
     if Type == "install" then
+        local already = {}
         for plate, data in pairs(FileData) do
-            if FileData[plate] then
+            if not already[plate] then
               local plate_ = string.gsub(plate, '^%s*(.-)%s*$', '%1')
               result[#result + 1] = ('\t["%s"] = {\n\t    exhaust = "%s",\n\t    category = "%s",\n\t},\n'):format(
               plate_, data.exhaust, data.category)
+              already[plate] = true
             end
+        end
+    elseif Type == "soundlist" then
+        for category, data in pairs(FileData) do
+            local categoryResult = {}
+            for soundName, soundData in pairs(data) do
+                categoryResult[#categoryResult + 1] = string.format('\t\t%s = {\n\t\t\tprice = %d,\n\t\t\tlabel = "%s"\n\t\t},\n', soundName, soundData.price, soundData.label)
+            end
+            result[#result + 1] = string.format('\t%s = {\n%s\t},\n', category, table.concat(categoryResult, ""))
         end
     elseif Type == "zone" then
         for _, data in ipairs(FileData) do
@@ -42,7 +52,7 @@ function SaveFileData(FileData, Path, Type)
         end
     end
   
-    local DataTable = ('return {\n%s\n}'):format(table.concat(result, ""))
+    local DataTable = ('return {\n%s}'):format(table.concat(result, ""))
     SaveResourceFile(GetCurrentResourceName(), ('data/%s.lua'):format(Path), DataTable, -1)
 end
 
