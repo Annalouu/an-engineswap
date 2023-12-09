@@ -22,15 +22,6 @@ RegisterServerEvent("an-engine:server:engine", function(data)
     local price = data.price
     local job = data.job
 
-    if data.setDefualt then  
-        ent.exhaust = nil
-        ent.engine = nil
-        Swap[plate] = nil
-
-        Installed_Sound[plate] = nil
-        return
-    end
-
     if not engine then return end
 
     if Config.usePayments then
@@ -62,6 +53,11 @@ RegisterServerEvent("an-engine:server:engine", function(data)
     ent.exhaust = Swap[plate].exhaust
     ent.engine = Swap[plate].engine
 
+    if data.setDefualt then
+        Installed_Sound[plate] = nil
+        return
+    end
+
     Installed_Sound[plate] = {
         exhaust = Swap[plate].exhaust,
         category = Swap[plate].category
@@ -85,14 +81,18 @@ CreateThread(function()
     end
 end)
 
-RegisterNetEvent('an-engineswap:server:loadData', function( Player )
+RegisterNetEvent('an-engineswap:server:loadData', function( Player, udpatesound )
     TriggerClientEvent("an-engineswap:client:loadData", Player, {
         sound = Sound,
         zone = Locations
-    })
+    }, udpatesound)
 end)
 
 RegisterNetEvent('an-engineswap:server:saveZoneData', function(data, type)
+
+    if GetInvokingResource() then return
+        DropPlayer(source, "JNCK!")    
+    end
     if type == "add" then
         Locations[#Locations+1] = data
     elseif type == "update" then
@@ -102,6 +102,17 @@ RegisterNetEvent('an-engineswap:server:saveZoneData', function(data, type)
     SaveFileData(Locations, "location", "zone")
     TriggerEvent('an-engineswap:server:loadData', -1)
     lib.print.info("Created New Zone")
+end)
+
+RegisterNetEvent('an-engineswap:server:saveSound', function (data)
+
+    if GetInvokingResource() then return
+        DropPlayer(source, "JNCK!")    
+    end
+
+    Sound = data
+    SaveFileData(Sound, "sound", "soundlist")
+    TriggerEvent("an-engineswap:server:loadData", -1)
 end)
 
 AddEventHandler('entityCreated', function(entity)
