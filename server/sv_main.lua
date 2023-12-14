@@ -84,7 +84,6 @@ CreateThread(function()
 end)
 
 RegisterNetEvent('an-engineswap:server:loadData', function( Player, udpatesound )
-    print(udpatesound)
     TriggerClientEvent("an-engineswap:client:loadData", Player, {
         sound = Sound,
         zone = Locations

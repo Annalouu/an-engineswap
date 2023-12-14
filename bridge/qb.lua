@@ -15,14 +15,7 @@ function Core.getMyJob( type )
 end
 
 if isServer then
-    AddEventHandler('onResourceStart', function(resource)
-        if resource == GetCurrentResourceName() then
-             Wait(1000)
-             local Player = Core.getPlayer(source)
-             TriggerEvent("an-engineswap:server:loadData", Player.PlayerData.source)
-        end
-    end)
-
+    
     function Core.getPlayer(source)
         Wait(1000)
         if not PlayerData[source] then

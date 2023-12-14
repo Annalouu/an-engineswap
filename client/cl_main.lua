@@ -2,8 +2,8 @@ local vehicle_sounds = {}
 local ZoneStatus = {}
 local CreatedZone = {}
 
-local Locations = {}
-local Sound = {}
+local Locations = require "data.location"
+local Sound = require "data.sound"
 
 --- job and rank checking
 ---@param JobData any
@@ -323,7 +323,6 @@ end)
 
 -- [[ Event ]]
 RegisterNetEvent('an-engineswap:client:loadData', function ( FileData, updateSound )
-    print(FileData.sound, FileData.zone)
     if FileData.sound then
         Sound = FileData.sound
     end
