@@ -5,9 +5,10 @@ function SaveFileData(FileData, Path, Type)
         local already = {}
         for plate, data in pairs(FileData) do
             if not already[plate] then
+            
               local plate_ = string.gsub(plate, '^%s*(.-)%s*$', '%1')
-              result[#result + 1] = ('\t["%s"] = {\n\t    exhaust = "%s",\n\t    category = "%s",\n\t},\n'):format(
-              plate_, data.exhaust, data.category)
+              result[#result + 1] = ('\t["%s"] = {\n\t    exhaust = "%s",\n\t    category = "%s",\n\t},\n'):format(plate_, data.exhaust, data.category)
+            
               already[plate] = true
             end
         end

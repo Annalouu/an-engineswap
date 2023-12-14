@@ -55,6 +55,7 @@ RegisterServerEvent("an-engine:server:engine", function(data)
 
     if data.setDefualt then
         Installed_Sound[plate] = nil
+        SaveFileData(Installed_Sound, "installed_sound", "install")
         return
     end
 
@@ -62,6 +63,7 @@ RegisterServerEvent("an-engine:server:engine", function(data)
         exhaust = Swap[plate].exhaust,
         category = Swap[plate].category
     }
+    SaveFileData(Installed_Sound, "installed_sound", "install")
 end)
 
 CreateThread(function()
@@ -82,6 +84,7 @@ CreateThread(function()
 end)
 
 RegisterNetEvent('an-engineswap:server:loadData', function( Player, udpatesound )
+    print(udpatesound)
     TriggerClientEvent("an-engineswap:client:loadData", Player, {
         sound = Sound,
         zone = Locations
@@ -130,9 +133,4 @@ end)
 
 AddEventHandler('txAdmin:events:serverShuttingDown', function() 
     SaveFileData(Installed_Sound, "installed_sound", "install")
-end)
-
-lib.cron.new(("*/%s * * * *"):format(Config.updateInterval), function ()
-    SaveFileData(Installed_Sound, "installed_sound", "install")
-    lib.print.info("Saved Data File")
 end)

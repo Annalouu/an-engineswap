@@ -38,6 +38,7 @@ end
 ---@param JobData any
 ---@return table
 local function CreateCategoryMenu ( Category, JobData, adminView )
+    
     local dataToSend = {}
     if Category == "car" then
         dataToSend = {
@@ -322,6 +323,7 @@ end)
 
 -- [[ Event ]]
 RegisterNetEvent('an-engineswap:client:loadData', function ( FileData, updateSound )
+    print(FileData.sound, FileData.zone)
     if FileData.sound then
         Sound = FileData.sound
     end
@@ -331,9 +333,7 @@ RegisterNetEvent('an-engineswap:client:loadData', function ( FileData, updateSou
     end
 
     if updateSound then return
-
     end
-
     LoadZone()
 end)
 

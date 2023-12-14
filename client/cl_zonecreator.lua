@@ -77,7 +77,6 @@ local function CancelPlacement()
     Editing = false
 end
 
-
 function DrawZone ( data )
     if Editing then return
     end

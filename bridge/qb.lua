@@ -6,7 +6,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 Core = {}
 
-function Core.getMyJob ( type )
+function Core.getMyJob( type )
     if type == "name" then
         return QBCore.Functions.GetPlayerData().job.name
     elseif type == "grade" then
@@ -15,7 +15,16 @@ function Core.getMyJob ( type )
 end
 
 if isServer then
-    function Core.getPlayer ( source )
+    AddEventHandler('onResourceStart', function(resource)
+        if resource == GetCurrentResourceName() then
+             Wait(1000)
+             local Player = Core.getPlayer(source)
+             TriggerEvent("an-engineswap:server:loadData", Player.PlayerData.source)
+        end
+    end)
+
+    function Core.getPlayer(source)
+        Wait(1000)
         if not PlayerData[source] then
             PlayerData[source] = QBCore.Functions.GetPlayer(source)
         end
@@ -40,7 +49,7 @@ if isServer then
         return ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
     end
 
-    function Core.getMyJob ( source, type )
+    function Core.getMyJob( source, type )
         local Player = PlayerData[source]
         if not Player then return "Unknown" end
 
@@ -55,4 +64,5 @@ if isServer then
         local Player = Core.getPlayer(source)
         TriggerEvent("an-engineswap:server:loadData", Player.PlayerData.source)
     end)
+
 end
