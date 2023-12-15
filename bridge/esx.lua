@@ -58,6 +58,7 @@ if isServer then
     end
 
     RegisterNetEvent('esx:playerLoaded', function(player, xPlayer, isNew)
+        if not LocalPlayer.state.isLoggedIn then LocalPlayer.state:set("isLoggedIn", true, false) end
         TriggerEvent("an-engineswap:server:loadData", xPlayer.source)
     end)
 end
