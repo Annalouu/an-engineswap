@@ -2,8 +2,13 @@ local vehicle_sounds = {}
 local ZoneStatus = {}
 local CreatedZone = {}
 
-local Locations = require "data.location"
-local Sound = require "data.sound"
+local Locations = {}
+local Sound = {}
+
+if Config.debug then
+    Locations = require "data.location"
+    Sound = require "data.sound"
+end
 
 --- job and rank checking
 ---@param JobData any
@@ -250,7 +255,7 @@ local function LoadZone ( )
         CreatedZone[k] = lib.zones.sphere({
             coords = v.coords,
             radius = v.radius,
-            debug = v.debug,
+            debug = Config.debug or v.debug,
             inside = function ()
                 if not cache.vehicle then
                     Wait(1000)
@@ -310,6 +315,14 @@ CreateThread(function()
             end
         end
         Wait(3000)
+    end
+end)
+
+CreateThread(function ()
+    if Config.debug then
+        if LocalPlayer.state.isLoggedIn then
+            LoadZone()
+        end
     end
 end)
 
