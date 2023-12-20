@@ -16,7 +16,6 @@ RegisterServerEvent("an-engine:server:engine", function(data)
     if not veh then return end
 
     local plate = GetVehicleNumberPlateText(veh)
-    local ent = Entity(veh).state
     local category = data.category
     local engine = data.sound
     local price = data.price
@@ -50,10 +49,10 @@ RegisterServerEvent("an-engine:server:engine", function(data)
     Swap[plate].engine = engine
     Swap[plate].category = category
 
-    ent.exhaust = Swap[plate].exhaust
-    ent.engine = Swap[plate].engine
+    TriggerClientEvent('an-engineswap:client:receiveSwapData', -1, Swap)
 
     if data.setDefualt then
+        Swap[plate] = nil
         Installed_Sound[plate] = nil
         SaveFileData(Installed_Sound, "installed_sound", "install")
         return
@@ -63,6 +62,7 @@ RegisterServerEvent("an-engine:server:engine", function(data)
         exhaust = Swap[plate].exhaust,
         category = Swap[plate].category
     }
+    
     SaveFileData(Installed_Sound, "installed_sound", "install")
 end)
 
@@ -73,13 +73,9 @@ CreateThread(function()
         Swap[plate].current = data.exhaust
     end
 
-    for _,v in ipairs(GetAllVehicles()) do
-        local plate = GetVehicleNumberPlateText(v)
-        if Swap[plate] and plate == Swap[plate].plate then
-            local ent = Entity(v).state
-            ent.exhaust = Swap[plate].exhaust
-            ent.engine = Swap[plate].engine
-        end
+    while true do
+        TriggerClientEvent('an-engineswap:client:receiveSwapData', -1, Swap)
+        Wait(2000)
     end
 end)
 
@@ -115,19 +111,6 @@ RegisterNetEvent('an-engineswap:server:saveSound', function (data)
     Sound = data
     SaveFileData(Sound, "sound", "soundlist")
     TriggerEvent("an-engineswap:server:loadData", -1)
-end)
-
-AddEventHandler('entityCreated', function(entity)
-  local entity = entity
-  Wait(1000)
-    if DoesEntityExist(entity) and GetEntityPopulationType(entity) == 7 and GetEntityType(entity) == 2 then
-        local plate = GetVehicleNumberPlateText(entity)
-        if Swap[plate] and Swap[plate].exhaust then
-            local ent = Entity(entity).state
-            ent.exhaust = Swap[plate].exhaust
-            ent.engine = Swap[plate].engine
-        end
-    end
 end)
 
 AddEventHandler('txAdmin:events:serverShuttingDown', function() 
