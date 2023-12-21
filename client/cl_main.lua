@@ -5,6 +5,8 @@ local CreatedZone = {}
 local Locations = {}
 local Sound = {}
 
+local Swap = {}
+
 if Config.debug then
     Locations = require "data.location"
     Sound = require "data.sound"
@@ -294,29 +296,28 @@ local function LoadZone ( )
     end
 end
 
--- [[ Thread ]]
-CreateThread(function()
-    while true do
-        local veh = GetGamePool("CVehicle")
-        local mycoords = GetEntityCoords(cache.ped)
-        for k, v in pairs(veh) do
+local function CheckSound ()
+    local veh = GetGamePool("CVehicle")
+    local mycoords = GetEntityCoords(cache.ped)
+
+    local GetEntityCoords = GetEntityCoords
+    local ForceVehicleEngineAudio = ForceVehicleEngineAudio
+    local GetVehicleNumberPlateText = GetVehicleNumberPlateText
+    
+    for k, v in pairs(veh) do
+        local Plate = GetVehicleNumberPlateText(v)
+        if Swap[Plate] and Swap[Plate].exhaust then
             if #(mycoords - GetEntityCoords(v)) < 100 then
-                if not vehicle_sounds[v] then
-                    vehicle_sounds[v] = {}
-                end
-                local statebag = Entity(v).state
-                if statebag and statebag.exhaust then
-                    vehicle_sounds[v].exhaust = statebag.exhaust
-                    if vehicle_sounds[v].exhaust ~= vehicle_sounds[v].current then
-                        ForceVehicleEngineAudio(v, vehicle_sounds[v].exhaust)
-                        vehicle_sounds[v].current = vehicle_sounds[v].exhaust
-                    end
+                if not vehicle_sounds[v] then vehicle_sounds[v] = {} end
+                vehicle_sounds[v].exhaust = Swap[Plate].exhaust
+                if vehicle_sounds[v].exhaust ~= vehicle_sounds[v].current then
+                    ForceVehicleEngineAudio(v, vehicle_sounds[v].exhaust)
+                    vehicle_sounds[v].current = vehicle_sounds[v].exhaust
                 end
             end
         end
-        Wait(3000)
     end
-end)
+end
 
 CreateThread(function ()
     if Config.debug then
@@ -447,4 +448,9 @@ RegisterNetEvent('an-engineswap:client:listAllSound', function ()
         enginemenuAdmin.options[#enginemenuAdmin.options+1] = CreateCategoryMenu(category, nil, true)
     end
     Utils.createContext(enginemenuAdmin)
+end)
+
+RegisterNetEvent('an-engineswap:client:receiveSwapData', function( serverData )
+    Swap = serverData
+    CheckSound()
 end)
