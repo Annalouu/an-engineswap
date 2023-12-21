@@ -1,4 +1,4 @@
-# An-engine
+# An-engineswap
 - Engine swap script For QBcore & ESX
 - My discord: https://discord.gg/94FQvA84vB
 
@@ -16,7 +16,7 @@
 - You can add more zones for more mechanic shops
 
 # Install
-- Installation:
+- You need to download: https://github.com/Annalouu/an-engines
 - Drag an-engine to your resource folder
 - ensure an-engine in the server.cfg (After qb-core or es_extended)
 
