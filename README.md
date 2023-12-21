@@ -17,8 +17,8 @@
 
 # Install
 - You need to download: https://github.com/Annalouu/an-engines
-- Drag an-engine to your resource folder
-- ensure an-engine in the server.cfg (After qb-core or es_extended)
+- Drag an-engineswap and an-engine to your resource folder
+- ensure an-engineswap and an-engine in the server.cfg (After qb-core or es_extended and ox_lib)
 
 # Image
 ![image](https://cdn.discordapp.com/attachments/837147253562146846/1029785285908766720/unknown.png)
