@@ -27,6 +27,7 @@ Video: https://youtu.be/jry7129RGro (outdated)
 # dependency
 - ox_lib
 - QBcore & ESX
+- an-engines: https://github.com/Annalouu/an-engines
 
 # Credits
 Thanks to these people to contribute.
