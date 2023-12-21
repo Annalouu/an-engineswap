@@ -80,7 +80,7 @@ return {
 			price = 2500,
 			label = "GTR R35"
 		},
-		npolchar = {
+		polchar = {
 			price = 2500,
 			label = "charger V8"
 		},
@@ -144,6 +144,36 @@ return {
 			price = 2500,
 			label = "Flat 6"
 		},
+		aq07powerstroke67 = {
+			price = 2500,
+			label = "Powerstroke"
+		},
+		cammedcharger = {
+			price = 2500,
+			label = "Cammed Hemi v8"
+		},
+		gallardov10 = {
+			price = 2500,
+			label = "Lamborghini gallardo V10"
+		},
+		cummins5924v = {
+			price = 2500,
+			label = "Cummins"
+		},
+		tacumminsb = {
+			price = 2500,
+			label = "Cummins B"
+		},
+		ta008mustang69 = {
+			price = 2500,
+			label = "ford Mustang v8 1960"
+		},
+		lg68ls3vette = {
+			price = 2500,
+			label = "LS V8"
+		},
+
+
 	},
 	motorcycle = {
 		tayamahar1 = {
@@ -157,6 +187,10 @@ return {
 		bmws1krreng = {
 			price = 2500,
 			label = "Bike bmws1krreng"
+		},
+		harleyvtwin = {
+			price = 2500,
+			label = "Harley"
 		},
 	},
 }

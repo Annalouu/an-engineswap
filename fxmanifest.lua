@@ -44,6 +44,29 @@ files {
 lua54 'yes'
 
 -- [[ Data Files ]] --
+data_file 'AUDIO_GAMEDATA' 'audioconfig/harleyvtwin_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/harleyvtwin_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_harleyvtwin'
+data_file 'AUDIO_GAMEDATA' 'audioconfig/gallardov10_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/gallardov10_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_gallardov10'
+data_file 'AUDIO_GAMEDATA' 'audioconfig/ta008mustang69_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/ta008mustang69_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_ta008mustang69'
+data_file 'AUDIO_GAMEDATA' 'audioconfig/tacumminsb_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/tacumminsb_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_tacumminsb'
+data_file 'AUDIO_GAMEDATA' 'audioconfig/cammedcharger_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/cammedcharger_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_cammedcharger'
+data_file "AUDIO_SYNTHDATA" "audioconfig/lg68ls3vette_amp.dat"
+data_file "AUDIO_GAMEDATA" "audioconfig/lg68ls3vette_game.dat"
+data_file "AUDIO_SOUNDDATA" "audioconfig/lg68ls3vette_sounds.dat"
+data_file "AUDIO_WAVEPACK" "sfx/dlc_lg68ls3vette"
+data_file "AUDIO_SYNTHDATA" "audioconfig/lg100rptorv8_amp.dat"
+data_file "AUDIO_GAMEDATA" "audioconfig/lg100rptorv8_game.dat"
+data_file "AUDIO_SOUNDDATA" "audioconfig/lg100rptorv8_sounds.dat"
+data_file "AUDIO_WAVEPACK" "sfx/dlc_lg100rptorv8"
 data_file 'AUDIO_GAMEDATA' 'audioconfig/npcul_game.dat'
 data_file 'AUDIO_SOUNDDATA' 'audioconfig/npcul_sounds.dat'
 data_file 'AUDIO_WAVEPACK' 'sfx/dlc_npcul'
@@ -179,3 +202,6 @@ data_file "AUDIO_WAVEPACK" "sfx/dlc_bmws1krreng"
 data_file 'AUDIO_GAMEDATA' 'audioconfig/sultanrsv8_game.dat'
 data_file 'AUDIO_SOUNDDATA' 'audioconfig/sultanrsv8_sounds.dat'
 data_file 'AUDIO_WAVEPACK' 'sfx/dlc_v8sultanrs'
+data_file 'AUDIO_GAMEDATA' 'audioconfig/cummins5924v_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/cummins5924v_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_cummins5924v'
