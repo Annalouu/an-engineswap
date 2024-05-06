@@ -306,10 +306,20 @@ local function CheckSound ()
     
     for k, v in pairs(veh) do
         local Plate = GetVehicleNumberPlateText(v)
+        local PlateTrimmed = Plate:gsub("^%s*(.-)%s*$", "%1")
         if Swap[Plate] and Swap[Plate].exhaust then
             if #(mycoords - GetEntityCoords(v)) < 100 then
                 if not vehicle_sounds[v] then vehicle_sounds[v] = {} end
                 vehicle_sounds[v].exhaust = Swap[Plate].exhaust
+                if vehicle_sounds[v].exhaust ~= vehicle_sounds[v].current then
+                    ForceVehicleEngineAudio(v, vehicle_sounds[v].exhaust)
+                    vehicle_sounds[v].current = vehicle_sounds[v].exhaust
+                end
+            end
+        elseif Swap[PlateTrimmed] and Swap[PlateTrimmed].exhaust then
+            if #(mycoords - GetEntityCoords(v)) < 100 then
+                if not vehicle_sounds[v] then vehicle_sounds[v] = {} end
+                vehicle_sounds[v].exhaust = Swap[PlateTrimmed].exhaust
                 if vehicle_sounds[v].exhaust ~= vehicle_sounds[v].current then
                     ForceVehicleEngineAudio(v, vehicle_sounds[v].exhaust)
                     vehicle_sounds[v].current = vehicle_sounds[v].exhaust
