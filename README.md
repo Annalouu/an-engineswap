@@ -22,7 +22,7 @@
 
 # Image
 ![image](https://cdn.discordapp.com/attachments/837147253562146846/1029785285908766720/unknown.png)
-Video: https://youtu.be/jry7129RGro (outdated)
+Video: [2023-12-08_15-19-18.mp4](https://cdn.discordapp.com/attachments/1182603049248763944/1182603055317925899/2023-12-08_15-19-18.mp4?ex=66f129ec&is=66efd86c&hm=b0dafdf3be4a3b92bbb2d40eee10c3a37f1cdc4f71c6601c3b39950035712722&)
 
 # dependency
 - ox_lib
