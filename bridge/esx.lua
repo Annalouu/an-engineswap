@@ -17,7 +17,7 @@ RegisterNetEvent('an-engineswap:client:updatePlayerJob', function(job)
     Core.job.grade = job.grade
 end)
 
-if IsDuplicityVersion() then
+if lib.context == 'server' then
     ---@class Player: OxClass
     local player = lib.class('Player')
     local ESX = exports.es_extended:getSharedObject()
