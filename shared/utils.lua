@@ -1,5 +1,9 @@
 Utils = {}
 
+function string.trim(string)
+  return string:gsub('^%s*(.-)%s*$', '%1')
+end
+
 function Utils.Notify ( NotifyData )
     if IsDuplicityVersion() then
         lib.notify( NotifyData.source, {
@@ -37,4 +41,9 @@ end
 function Utils.createContext ( contextData )
   lib.registerContext(contextData)
   lib.showContext(contextData.id)
+end
+
+function Utils.getPlate(vehicle)
+  if not DoesEntityExist(vehicle) then return end
+  return GetVehicleNumberPlateText(vehicle):trim()
 end
