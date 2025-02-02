@@ -1,65 +1,102 @@
 if GetResourceState("es_extended") ~= "started" then return end
 
-local PlayerData = {}
-local isServer = IsDuplicityVersion()
-local ESX = exports.es_extended:getSharedObject()
-
 Core = {}
+Core.job = {
+    name = 'unemployed',
+    grade = 0
+}
 
-function Core.getMyJob ( type )
-    if type == "name" then
-        return ESX.GetPlayerData().job.name
-    elseif type == "grade" then
-        return ESX.GetPlayerData().job.grade
+RegisterNetEvent('esx:setJob', function(job)
+    Core.job.name = job.name
+    Core.job.grade = job.grade
+end)
+
+RegisterNetEvent('an-engineswap:client:updatePlayerJob', function(job)
+    if source == '' then return end
+    Core.job.name = job.name
+    Core.job.grade = job.grade
+end)
+
+if IsDuplicityVersion() then
+    ---@class Player: OxClass
+    local player = lib.class('Player')
+    local ESX = exports.es_extended:getSharedObject()
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:constructor(source)
+        self.player = ESX.GetPlayerFromId(source)
     end
-end
 
-if isServer then
-    function Core.getPlayer ( source )
-        if not PlayerData[source] then
-            PlayerData[source] = ESX.GetPlayerFromId(source)
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:getJob()
+        return {
+            name = self.player.job.name,
+            grade = self.player.job.grade
+        }
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:getIdentifier()
+        return self.player.identifier
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:isGroups(groups)
+        local _gt = type(groups)
+        local myJob = self:getJob()
+    
+        if _gt == 'table' then
+            local _tt = table.type(groups)
+            if _tt == 'array' then
+                return lib.array.find(groups, function (v)
+                    if v == myJob.name then
+                        return true
+                    end
+                end)
+            elseif _tt == 'hash' then
+                return groups[myJob.name] and groups[myJob.name] >= myJob.grade
+            end
+        elseif _gt == 'string' then
+            return groups == myJob.name
         end
-        return PlayerData[source]
+        return false
     end
 
-    function Core.removeMoney(source, type, amount )
-        local Player = PlayerData[source]
-        if not Player then return false end
-        local Removed = false
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:isAdmin()
+        return self.player.getGroup() == 'admin'
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:removeMoney(type, count)
         local moneyType = type == "cash" and "money" or type
-        if Player.getAccount(moneyType).money >= amount then
-            Player.removeAccountMoney(moneyType, amount, "")
-            Removed = true
+
+        if self.player.getAccount(moneyType).money >= count then
+            self.player.removeAccountMoney(moneyType, count, '')
+            return true
         end
-        return Removed
+        return false
     end
 
-    function Core.getCid( source )
-        local Player = PlayerData[source]
-        if not Player then return "Unknown" end
-        return Player.identifier
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:getName()
+        return self.player.name
     end
 
-    function Core.getName( source )
-        local Player = PlayerData[source]
-        if not Player then return "Unknown" end
-        return Player.getName()
-    end
-
-    function Core.getMyJob ( source, type )
-        local Player = PlayerData[source]
-        if not Player then return "Unknown" end
-
-        if type == "name" then
-            return Player.job.name
-        elseif type == "grade" then
-            return Player.job.grade
-        end
-    end
-
-    RegisterNetEvent('esx:playerLoaded', function(player, xPlayer, isNew)
+    RegisterNetEvent('esx:playerLoaded', function(_, xPlayer, isNew)
         local statebag = Player(xPlayer.source).state
         if not statebag.isLoggedIn then statebag:set("isLoggedIn", true, true) end
-        TriggerEvent("an-engineswap:server:loadData", xPlayer.source)
+        Core.Player[xPlayer.source] = player:new(xPlayer.source)
+    end)
+
+    lib.addCommand('loadplayer', {
+        help = 'Load player',
+        restricted = 'group.admin'
+    }, function(source, args, raw)
+        if not Core.Player[source] then
+            Core.Player[source] = player:new(source)
+            Wait(200)
+            TriggerClientEvent('an-engineswap:client:updatePlayerJob', source, Core.Player[source]:getJob())
+        end
     end)
 end
