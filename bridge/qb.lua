@@ -1,61 +1,98 @@
-if GetResourceState("qb-core") ~= "started" then return end 
-
-local PlayerData = {}
-local isServer = IsDuplicityVersion()
-local QBCore = exports['qb-core']:GetCoreObject()
+if GetResourceState("qb-core") ~= "started" then return end
 
 Core = {}
+Core.job = {
+    name = 'unemployed',
+    grade = 0
+}
 
-function Core.getMyJob( type )
-    if type == "name" then
-        return QBCore.Functions.GetPlayerData().job.name
-    elseif type == "grade" then
-        return QBCore.Functions.GetPlayerData().job.grade.level
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
+    Core.job.name = job.name
+    Core.job.grade = job.grade.level
+end)
+
+RegisterNetEvent('an-engineswap:client:updatePlayerJob', function(job)
+    if source == '' then return end
+    Core.job.name = job.name
+    Core.job.grade = job.grade
+end)
+
+if lib.context == 'server' then
+    Core.Player = {}
+
+    ---@class Player: OxClass
+    local player = lib.class('Player')
+    local QBCore = exports['qb-core']:GetCoreObject()
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:constructor(source)
+        self.player = QBCore.Functions.GetPlayer(source) --[[@as table]]
     end
-end
 
-if isServer then
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:isAdmin()
+        return IsPlayerAceAllowed(self.player.PlayerData.source --[[@as string]], 'admin')
+    end
     
-    function Core.getPlayer(source)
-        Wait(1000)
-        if not PlayerData[source] then
-            PlayerData[source] = QBCore.Functions.GetPlayer(source)
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:getIdentifier()
+        return self.player.PlayerData.citizenid
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:getJob()
+        local pData = self.player.PlayerData
+        return {
+            name = pData.job.name,
+            grade = pData.job.grade.level
+        }
+    end
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:isGroups(groups)
+        local _gt = type(groups)
+        local myJob = self:getJob()
+    
+        if _gt == 'table' then
+            local _tt = table.type(groups)
+            if _tt == 'array' then
+                return lib.array.find(groups, function (v)
+                    if v == myJob.name then
+                        return true
+                    end
+                end)
+            elseif _tt == 'hash' then
+                return groups[myJob.name] and groups[myJob.name] >= myJob.grade
+            end
+        elseif _gt == 'string' then
+            return groups == myJob.name
         end
-        return PlayerData[source]
+        return false
     end
 
-    function Core.removeMoney(source, type, amount )
-        local Player = PlayerData[source]
-        if not Player then return false end
-        return Player.Functions.RemoveMoney(type, amount)
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:removeMoney(type, count)
+        return self.player.Functions.RemoveMoney(type, count, '')
     end
 
-    function Core.getCid( source )
-        local Player = PlayerData[source]
-        if not Player then return "Unknown" end
-        return Player.PlayerData.citizenid
-    end
-
-    function Core.getName( source )
-        local Player = PlayerData[source]
-        if not Player then return "Unknown" end
-        return ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-    end
-
-    function Core.getMyJob( source, type )
-        local Player = PlayerData[source]
-        if not Player then return "Unknown" end
-
-        if type == "name" then
-            return Player.PlayerData.job.name
-        elseif type == "grade" then
-            return Player.PlayerData.job.grade.level
-        end
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function player:getName()
+        local charinfo = self.player.PlayerData.charinfo
+        return ('%s %s'):format(charinfo.firstname, charinfo.lastname)
     end
 
     RegisterNetEvent('QBCore:Server:OnPlayerLoaded', function()
-        local Player = Core.getPlayer(source)
-        TriggerEvent("an-engineswap:server:loadData", Player.PlayerData.source)
+        Core.Player[source --[[@as string]]] = player:new(source)
     end)
 
+    lib.addCommand('loadplayer', {
+        help = 'Load player',
+        restricted = 'group.admin'
+    }, function(source, args, raw)
+        if not Core.Player[source] then
+            Core.Player[source] = player:new(source)
+            Wait(200)
+            TriggerClientEvent('an-engineswap:client:updatePlayerJob', source, Core.Player[source]:getJob())
+        end
+    end)
 end

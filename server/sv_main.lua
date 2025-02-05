@@ -1,116 +1,105 @@
-local Swap = {}
-
 local Installed_Sound = require "data.installed_sound"
 local Locations = require "data.location"
 local Sound = require "data.sound"
 
-RegisterServerEvent("an-engine:server:engine", function(data)
-    if GetInvokingResource() then return end
-    local src = source
-    local Player = Core.getPlayer(src)
-    if not Player then return end
-    local cid = Core.getCid(src)
-    local myName = Core.getName(src)
-    local veh = GetVehiclePedIsIn(GetPlayerPed(src), false)
+local function canInstall(source, ped)
+    local player = Core.Player[source]
 
-    if not veh then return end
+    if player:isAdmin() then
+        return true
+    else
+        local myCoords = GetEntityCoords(ped)
+        return lib.array.find(Locations, function (v)
+            local worker = true
 
-    local plate = GetVehicleNumberPlateText(veh)
-    local category = data.category
-    local engine = data.sound
-    local price = data.price
-    local job = data.job
-
-    if not engine then return end
-
-    if Config.usePayments then
-        local moneyType = Config.moneyType
-        if not Core.removeMoney(src, moneyType, price) then return
-            Utils.Notify({source = src, msg = "You dont have enough money..", type = "error"}) 
-        end
-        
-        if Config.RenewedBanking then
-            exports['Renewed-Banking']:handleTransaction(cid, "Engine local Swap", price, "Swapped Engine by Mechanics", "Los Santos Customs", myName, "withdraw")
-
-            if job then
-                local myJob = Core.getMyJob(src, "name")
-                exports['Renewed-Banking']:addAccountMoney(myJob, price)
+            if v.groups ~= nil then
+                worker = player:isGroups(v.groups)
             end
-        end
+
+            if worker and #(myCoords - v.coords) < 5.0 then
+                return true
+            end
+        end)
     end
- 
-    if not Swap[plate] then
-        Swap[plate] = {}
-    end
+end
 
-    Swap[plate].current = Swap[plate].exhaust or engine
-    Swap[plate].exhaust = engine
-    Swap[plate].plate = plate
-    Swap[plate].engine = engine
-    Swap[plate].category = category
+RegisterNetEvent('an-engine:server:install', function (data)
+    local source = source --[[@as string]]
+    local player = Core.Player[source]
 
-    TriggerClientEvent('an-engineswap:client:receiveSwapData', -1, Swap)
-
-    if data.setDefualt then
-        Swap[plate] = nil
-        Installed_Sound[plate] = nil
-        SaveFileData(Installed_Sound, "installed_sound", "install")
+    if not player then
+        lib.print.error('The player data has not been loaded, use the command /loadplayer to load the player data.')
         return
     end
 
-    Installed_Sound[plate] = {
-        exhaust = Swap[plate].exhaust,
-        category = Swap[plate].category
+    local ped = GetPlayerPed(source)
+    local vehicle = GetVehiclePedIsIn(ped, false)
+
+    if not vehicle or vehicle == 0 then
+        return
+    end
+
+    if not canInstall(source, ped) then
+        return
+    end
+
+    local category = data.category
+    local engine = data.sound
+    local price = data.price
+
+    if not engine then return end
+    local success = true
+
+    if Config.usePayments then
+        success = player:removeMoney(Config.moneyType, price)
+        
+        if success and Config.moneyType == 'bank' and Config.RenewedBanking then
+            pcall(function ()
+                exports['Renewed-Banking']:handleTransaction(player:getIdentifier(), "Engine local Swap", price, "Swapped Engine by Mechanics", "Los Santos Customs", player:getName(), "withdraw")
+            end)
+        end
+    end
+
+    if not success then
+        return lib.notify(source, {
+            description = 'You dont have enough money',
+            type = 'error'
+        })
+    end
+
+    local plate = Utils.getPlate(vehicle) --[[@as string]]
+    Entity(vehicle).state:set('an_engine', engine, true)
+
+    Installed_Sound[plate] = data.setDefualt and nil or {
+        exhaust = engine,
+        category = category
     }
-    
+
     SaveFileData(Installed_Sound, "installed_sound", "install")
 end)
 
-CreateThread(function()
-    for plate, data in pairs(Installed_Sound) do
-        Swap[plate] = data
-        Swap[plate].engine = data.exhaust
-        Swap[plate].current = data.exhaust
-    end
-
-    while true do
-        TriggerClientEvent('an-engineswap:client:receiveSwapData', -1, Swap)
-        Wait(2000)
-    end
-end)
-
-RegisterNetEvent('an-engineswap:server:loadData', function( Player, udpatesound )
-    TriggerClientEvent("an-engineswap:client:loadData", Player, {
-        sound = Sound,
-        zone = Locations
-    }, udpatesound)
-end)
-
 RegisterNetEvent('an-engineswap:server:saveZoneData', function(data, type)
+    local player = Core.Player[source --[[@as string]]]
+    if not player:isAdmin() then return end
 
-    if GetInvokingResource() then return
-        DropPlayer(source, "JNCK!")    
-    end
     if type == "add" then
         Locations[#Locations+1] = data
     elseif type == "update" then
         Locations = data
     end
 
-    SaveFileData(Locations, "location", "zone")
-    TriggerEvent('an-engineswap:server:loadData', -1)
     lib.print.info("Created New Zone")
+    SaveFileData(Locations, "location", "zone")
+    TriggerClientEvent("an-engineswap:client:loadData", -1, { sound = Sound, zone = Locations }, false)
 end)
 
 RegisterNetEvent('an-engineswap:server:saveSound', function (data)
-
-    if GetInvokingResource() then return
-        DropPlayer(source, "JNCK!")    
-    end
+    local player = Core.Player[source --[[@as string]]]
+    if not player:isAdmin() then return end
 
     Sound = data
     SaveFileData(Sound, "sound", "soundlist")
-    TriggerEvent("an-engineswap:server:loadData", -1)
+    TriggerClientEvent("an-engineswap:client:loadData", -1, { sound = Sound, zone = Locations }, true)
 end)
 
 AddEventHandler('txAdmin:events:serverShuttingDown', function() 

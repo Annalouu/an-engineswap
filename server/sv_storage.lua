@@ -54,6 +54,6 @@ function SaveFileData(FileData, Path, Type)
     end
   
     local DataTable = ('return {\n%s}'):format(table.concat(result, ""))
-    SaveResourceFile(GetCurrentResourceName(), ('data/%s.lua'):format(Path), DataTable, -1)
+    SaveResourceFile(cache.resource, ('data/%s.lua'):format(Path), DataTable, -1)
 end
 

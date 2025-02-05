@@ -119,6 +119,8 @@ function DrawZone ( data )
 end
 
 RegisterNetEvent('an-engineswap:client:creteZone', function( )
+    if source == '' then return end
+
     DrawZone({
         generated = function ( data )
             local pending = false
