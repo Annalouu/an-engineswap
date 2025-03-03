@@ -18,6 +18,8 @@ RegisterNetEvent('an-engineswap:client:updatePlayerJob', function(job)
 end)
 
 if lib.context == 'server' then
+    Core.Player = {}
+
     ---@class Player: OxClass
     local player = lib.class('Player')
     local ESX = exports.es_extended:getSharedObject()
