@@ -84,25 +84,26 @@ RegisterNetEvent('an-engineswap:server:saveZoneData', function(data, type)
 
     if type == "add" then
         Locations[data.uuid] = data
+        lib.print.info("Created New Zone")
     elseif type == "delete" then
-        if Locations[data.uuid] ~= nil then
-            Locations[data.uuid] = nil
+        if Locations[data] ~= nil then
+            Locations[data] = nil
         end
+        lib.print.info("Deleted Zone: " .. data)
     end
 
-    lib.print.info("Created New Zone")
     SaveFileData(Locations, "location", "zone")
     TriggerClientEvent("an-engineswap:client:zoneAction", -1, data, type)
 end)
 
-RegisterNetEvent('an-engineswap:server:changeSoundData', function(newData, index)
+RegisterNetEvent('an-engineswap:server:changeSoundData', function(newData, category, index)
     local player = Core.Player[source --[[@as string]]]
     if not player:isAdmin() then return end
 
-    if Sound[index] ~= nil then
-        Sound[index] = newData
+    if Sound[category] and Sound[category][index] then
+        Sound[category][index] = newData
         SaveFileData(Sound, "sound", "soundlist")
-        TriggerClientEvent("an-engineswap:client:updateSound", -1, index, newData)
+        TriggerClientEvent("an-engineswap:client:updateSound", -1, index, category, newData)
     else
         lib.print.error("Sound index does not exist.")
     end
