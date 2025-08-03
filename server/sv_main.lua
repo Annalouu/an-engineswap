@@ -83,23 +83,41 @@ RegisterNetEvent('an-engineswap:server:saveZoneData', function(data, type)
     if not player:isAdmin() then return end
 
     if type == "add" then
-        Locations[#Locations+1] = data
-    elseif type == "update" then
-        Locations = data
+        Locations[data.uuid] = data
+    elseif type == "delete" then
+        if Locations[data.uuid] ~= nil then
+            Locations[data.uuid] = nil
+        end
     end
 
     lib.print.info("Created New Zone")
     SaveFileData(Locations, "location", "zone")
-    TriggerClientEvent("an-engineswap:client:loadData", -1, { sound = Sound, zone = Locations }, false)
+    TriggerClientEvent("an-engineswap:client:zoneAction", -1, data, type)
 end)
 
-RegisterNetEvent('an-engineswap:server:saveSound', function (data)
+RegisterNetEvent('an-engineswap:server:changeSoundData', function(newData, index)
     local player = Core.Player[source --[[@as string]]]
     if not player:isAdmin() then return end
 
-    Sound = data
+    if Sound[index] ~= nil then
+        Sound[index] = newData
+        SaveFileData(Sound, "sound", "soundlist")
+        TriggerClientEvent("an-engineswap:client:updateSound", -1, index, newData)
+    else
+        lib.print.error("Sound index does not exist.")
+    end
+end)
+
+RegisterNetEvent('an-engineswap:server:newSound', function(data)
+    local player = Core.Player[source --[[@as string]]]
+    if not player:isAdmin() then return end
+
+    Sound[data.type][data.name] = {
+        price = data.price,
+        label = data.label
+    }
     SaveFileData(Sound, "sound", "soundlist")
-    TriggerClientEvent("an-engineswap:client:loadData", -1, { sound = Sound, zone = Locations }, true)
+    TriggerClientEvent("an-engineswap:client:addNewSound", -1, data)
 end)
 
 AddEventHandler('txAdmin:events:serverShuttingDown', function() 

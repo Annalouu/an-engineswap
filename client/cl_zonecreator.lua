@@ -132,6 +132,7 @@ RegisterNetEvent('an-engineswap:client:creteZone', function( )
             })
             if input then
                 local data = {
+                    uuid = lib.string.random("aaaaaa"),
                     coords = data.coords,
                     radius = data.radius,
                     debug = input[3],
