@@ -21,7 +21,7 @@ function SaveFileData(FileData, Path, Type)
             result[#result + 1] = string.format('\t%s = {\n%s\t},\n', category, table.concat(categoryResult, ""))
         end
     elseif Type == "zone" then
-        for _, data in ipairs(FileData) do
+        for uuid, data in pairs(FileData) do
             local coordsStr = string.format('vector3(%f, %f, %f)', data.coords.x, data.coords.y, data.coords.z)
 
             local groupsStr = nil
@@ -48,8 +48,8 @@ function SaveFileData(FileData, Path, Type)
         
             local drawTextStr = string.format('drawtext = { inveh = "%s", outveh = "%s" }', data.drawtext.inveh, data.drawtext.outveh)
         
-            result[#result + 1] = string.format('\t{\n\t\tcoords = %s,\n\t\tradius = %f,\n\t\tgroups = %s,\n\t\tdebug = %s,\n\t\t%s\n\t},\n',
-            coordsStr, data.radius, groupsStr, tostring(data.debug), drawTextStr)
+            result[#result + 1] = string.format('\t["%s"] = {\n\t\tcoords = %s,\n\t\tradius = %f,\n\t\tgroups = %s,\n\t\tdebug = %s,\n\t\t%s\n\t},\n',
+            uuid, coordsStr, data.radius, groupsStr, tostring(data.debug), drawTextStr)
         end
     end
   

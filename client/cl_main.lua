@@ -72,7 +72,7 @@ local function CreateCategoryMenu(Category, JobData, adminView)
                                             
                                             if input then
                                                 Sound[Category][sound].label = input[1]
-                                                TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+                                                TriggerServerEvent("an-engineswap:server:changeSoundData", Sound[Category][sound], Category, sound)
                                                 Utils.Notify({msg = "Sound label has been successfully changed", type = "success", duration = 8000})
                                             end
                                         end
@@ -87,7 +87,7 @@ local function CreateCategoryMenu(Category, JobData, adminView)
                                             
                                             if input then
                                                 Sound[Category][sound].price = input[1]
-                                                TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+                                                TriggerServerEvent("an-engineswap:server:changeSoundData", Sound[Category][sound], Category, sound)
                                                 Utils.Notify({msg = ("The sound price has been successfully changed to $%s"):format(tonumber((input[1]))), type = "success", duration = 8000})
                                             end
                                         end
@@ -97,7 +97,7 @@ local function CreateCategoryMenu(Category, JobData, adminView)
                                         icon = "trash",
                                         onSelect = function ()
                                             Sound[Category][sound] = nil
-                                            TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+                                            TriggerServerEvent("an-engineswap:server:changeSoundData", Sound[Category][sound], Category, sound)
                                             Utils.Notify({msg = "Sound successfully deleted", "success", 8000})
                                         end
                                     }
@@ -160,14 +160,13 @@ end
 
 --- Load the Zone that has been created
 local function LoadZone ( )
-    for i=1, #Locations do
-        local v = Locations[i]
-        if CreatedZone[i] then
-            CreatedZone[i]:remove()
+    for uuid, v in pairs(Locations) do
+        if CreatedZone[uuid] then
+            CreatedZone[uuid]:remove()
             Wait(500)
         end
 
-        CreatedZone[i] = lib.zones.sphere({
+        CreatedZone[uuid] = lib.zones.sphere({
             coords = v.coords,
             radius = v.radius,
             debug = Config.debug or v.debug,
@@ -258,12 +257,19 @@ lib.onCache('vehicle', function(vehicle)
     end
 end)
 
--- [[ Event ]]
-RegisterNetEvent('an-engineswap:client:loadData', function ( FileData, updateSound )
-    if source == '' then return end
-    if FileData.sound then Sound = FileData.sound end
-    if FileData.zone then Locations = FileData.zone end
-    if updateSound then return end LoadZone()
+RegisterNetEvent('an-engineswap:client:updateSound', function(index, category, data)
+    Sound[category][index] = data
+end)
+
+RegisterNetEvent('an-engineswap:client:zoneAction', function(zoneData, type)
+    if type == "add" then
+        Locations[#Locations + 1] = zoneData
+        return LoadZone()
+    end
+
+    if Locations[zoneData] ~= nil then
+        Locations[zoneData] = nil
+    end
 end)
 
 RegisterNetEvent('an-engineswap:client:listCreatedZone', function()
@@ -302,7 +308,7 @@ RegisterNetEvent('an-engineswap:client:listCreatedZone', function()
                             icon = "trash",
                             onSelect = function ()
                                 Locations[index] = nil
-                                TriggerServerEvent("an-engineswap:server:saveZoneData", Locations, "update")
+                                TriggerServerEvent("an-engineswap:server:saveZoneData", index, "delete")
                             end
                         }
                     }
@@ -347,7 +353,7 @@ RegisterNetEvent("an-engineswap:client:addSound", function ()
         }
 
         Utils.Notify({msg = "Successfully added a new sound to the list of engine swap sounds", type = "success", duration = 8000})
-        TriggerServerEvent("an-engineswap:server:saveSound", Sound)
+        TriggerServerEvent("an-engineswap:server:newSound", Data)
     end
 end)
 
