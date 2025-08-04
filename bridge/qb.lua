@@ -6,6 +6,15 @@ Core.job = {
     grade = 0
 }
 
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+    local QBCore = exports['qb-core']:GetCoreObject()
+    local playerData = QBCore.Functions.GetPlayerData()
+    Core.job.name = playerData.job.name
+    Core.job.grade = playerData.job.grade.level
+    LoadZone()
+end)
+
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     Core.job.name = job.name
     Core.job.grade = job.grade.level
