@@ -159,7 +159,7 @@ local function Openengine( Job )
 end
 
 --- Load the Zone that has been created
-local function LoadZone ( )
+function LoadZone ( )
     for uuid, v in pairs(Locations) do
         if CreatedZone[uuid] then
             CreatedZone[uuid]:remove()
@@ -209,9 +209,6 @@ end
 
 CreateThread(function ()
     local cacheSound = {}
-    if LocalPlayer.state.isLoggedIn then
-        LoadZone()
-    end
 
     while true do
         local vehicles = GetGamePool('CVehicle')
