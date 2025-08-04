@@ -5,7 +5,7 @@ local Sound = require "data.sound"
 local function canInstall(source, ped)
     local player = Core.Player[source]
 
-    if player:isAdmin() then
+    if player:isAdmin(source) then
         return true
     else
         local myCoords = GetEntityCoords(ped)
