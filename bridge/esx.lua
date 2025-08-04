@@ -6,6 +6,14 @@ Core.job = {
     grade = 0
 }
 
+RegisterNetEvent('esx:playerLoaded')
+AddEventHandler('esx:playerLoaded', function(playerData)
+    local ESX = exports['es_extended']:getSharedObject()
+    Core.job.name = playerData.job.name
+    Core.job.grade = playerData.job.grade
+    LoadZone()
+end)
+
 RegisterNetEvent('esx:setJob', function(job)
     Core.job.name = job.name
     Core.job.grade = job.grade
