@@ -5,6 +5,15 @@ lib.addCommand('createzone', {
     TriggerClientEvent("an-engineswap:client:creteZone", source)
 end)
 
+lib.addCommand('carsound', {
+    help = 'engineswap',
+    restricted = 'group.admin'
+}, function(source, args, raw)
+    local player = Core.Player[source --[[@as string]]]
+    local job = player:getJob()
+    TriggerClientEvent("an-engineswap:server:openengine", source,job)
+end)
+
 lib.addCommand('zonelist', {
     help = 'list all engine swap zones',
     restricted = 'group.admin'
