@@ -45,5 +45,5 @@ end
 
 function Utils.getPlate(vehicle)
   if not DoesEntityExist(vehicle) then return end
-  return GetVehicleNumberPlateText(vehicle):trim()
+  return GetVehicleNumberPlateText(vehicle):gsub("%s", "")
 end

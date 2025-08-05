@@ -5,4 +5,5 @@ Config = {
     moneyType = "cash", --- payment method (bank or cash)
     defaultSoundPrice = 1000, --- price for original sound
     autoIntegrateToGarage = true, --- Automatic integration with garage script. Sound detection when vehicle is taken out.
+    autoControlTime = 5 * 1000 --- Time in milliseconds to control the vehicle sound when taken out of garage.
 }
