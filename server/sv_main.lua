@@ -124,3 +124,33 @@ end)
 AddEventHandler('txAdmin:events:serverShuttingDown', function() 
     SaveFileData(Installed_Sound, "installed_sound", "install")
 end)
+
+local function setVehicleSound(vehicle)
+    if not DoesEntityExist(vehicle) then return end -- Check if the entity exists.
+    if GetEntityType(vehicle) ~= 2 then return end -- Only vehicles
+    local plate = Utils.getPlate(vehicle) -- [[@as string]]
+    
+   if Installed_Sound[plate] ~= nil and (Entity(vehicle).state.an_engine == nil or Entity(vehicle).state.an_engine == 'default') then
+        Entity(vehicle).state:set('an_engine', Installed_Sound[plate].exhaust, true)
+    end
+end
+
+if Config.autoIntegrateToGarage then
+    CreateThread(function()
+        while true do
+            local sleep = Config.autoControlTime
+            local vehicles = GetAllVehicles()
+            
+            for _, vehicle in ipairs(vehicles) do
+                setVehicleSound(vehicle)
+            end
+
+            Wait(sleep)
+        end
+    end)
+else
+    RegisterNetEvent('an-engineswap:server:vehicleSpawned', function(netId)
+        local vehicle = NetworkGetEntityFromNetworkId(netId)
+        setVehicleSound(vehicle)
+    end)
+end
