@@ -3,17 +3,18 @@
 - My discord: https://discord.gg/94FQvA84vB
 
 # Feats
-- Custom Engine
-- Custom Sounds
-- Fully Server sync using Onesync state bags
+- Custom Engine.
+- Custom Sounds.
+- Fully Server sync using Onesync state bags.
 - Cleaned and optimized and removed all the useless functions.
-- Create a new zone using the command ```/createzone``` in the game
-- View a list of all zones using the command ```/zonelist```
-- Add a new sound to the swap engine list using the command ```/addsound```
-- view all sound lists using the command ```/soundlist```
-- Each zone has its own authorized job
-- You can make it so only bosses of the jobs can engine swap
-- You can add more zones for more mechanic shops
+- If you are an admin you can do ```/carsound``` to open the engine swap menu without setting a zone.
+- Create a new zone using the command ```/createzone``` in the game.
+- View a list of all zones using the command ```/zonelist```.
+- Add a new sound to the swap engine list using the command ```/addsound```.
+- view all sound lists using the command ```/soundlist```.
+- Each zone has its own authorized job.
+- You can make it so only bosses of the jobs can engine swap.
+- You can add more zones for more mechanic shops.
 
 # Install
 - You need to download: https://github.com/Annalouu/an-engines
