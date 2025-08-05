@@ -158,6 +158,10 @@ local function Openengine( Job )
     Utils.createContext(enginemenu)
 end
 
+RegisterNetEvent('an-engineswap:server:openengine', function(data)
+    Openengine(data.name)
+end)
+
 --- Load the Zone that has been created
 function LoadZone ( )
     for uuid, v in pairs(Locations) do
