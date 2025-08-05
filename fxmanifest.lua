@@ -8,7 +8,7 @@ description 'Annalouu | Engine Swap!'
 github 'https://github.com/Annalouu/an-engineswap'
 
 -- [[ Version ]] --
-version '1.0.1'
+version '353'
 
 -- [[ Dependencies ]] --
 dependencies { 
