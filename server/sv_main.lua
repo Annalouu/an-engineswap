@@ -98,7 +98,7 @@ end)
 
 RegisterNetEvent('an-engineswap:server:changeSoundData', function(newData, category, index)
     local player = Core.Player[source --[[@as string]]]
-    if not player:isAdmin() then return end
+    if not player:isAdmin(source) then return end
 
     if Sound[category] and Sound[category][index] then
         Sound[category][index] = newData
@@ -111,7 +111,7 @@ end)
 
 RegisterNetEvent('an-engineswap:server:newSound', function(data)
     local player = Core.Player[source --[[@as string]]]
-    if not player:isAdmin() then return end
+    if not player:isAdmin(source) then return end
 
     Sound[data.type][data.name] = {
         price = data.price,
