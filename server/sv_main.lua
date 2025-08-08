@@ -80,7 +80,7 @@ end)
 
 RegisterNetEvent('an-engineswap:server:saveZoneData', function(data, type)
     local player = Core.Player[source --[[@as string]]]
-    if not player:isAdmin() then return end
+    if not player:isAdmin(source) then return end
 
     if type == "add" then
         Locations[data.uuid] = data
