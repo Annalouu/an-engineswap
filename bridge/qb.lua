@@ -39,8 +39,8 @@ if lib.context == 'server' then
     end
 
     ---@diagnostic disable-next-line: duplicate-set-field
-    function player:isAdmin()
-        return IsPlayerAceAllowed(self.player.PlayerData.source --[[@as string]], 'admin')
+    function player:isAdmin(source)
+        return IsPlayerAceAllowed(source --[[@as string]], 'admin')
     end
     
     ---@diagnostic disable-next-line: duplicate-set-field
